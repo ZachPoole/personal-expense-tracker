@@ -1,12 +1,17 @@
 #site-wrapper {
-  background-color: #f5f2f2;
+  //background-color: #f5f2f2;
+  background-color: #222529;
   height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+}
+
+#sidebar-wrapper {
+  display: flex;
+  width: 20%;
 }
 
 #router-wrapper {
   display: flex;
-  margin: 25px 10%;
-  width: 100%;
+  width: 80%;
 }
