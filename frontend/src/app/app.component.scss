@@ -1,17 +1,22 @@
 #site-wrapper {
   background-color: #222529;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: row;
+  overflow: scroll;
+  align-items: stretch;
 }
 
 #sidebar-wrapper {
+  align-items: stretch;
   width: 20%;
   background-color: #282b2f;
   padding: 20px;
+  flex-grow: 1;
 }
 
 #router-wrapper {
   margin: 20px;
   width: 80%;
+  height: 100%;
 }

@@ -1,1 +1,8 @@
-<p>tags works!</p>
+<div id="tags-component">
+  <p>Tagless Transactions</p>
+  <div id="transaction-list">
+    <div class="transaction-card" *ngFor="let transaction of mockTransactions">
+      {{ transaction.amount }}
+    </div>
+  </div>
+</div>
