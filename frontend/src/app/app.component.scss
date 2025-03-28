@@ -1,5 +1,4 @@
 #site-wrapper {
-  //background-color: #f5f2f2;
   background-color: #222529;
   height: 100vh;
   display: flex;
@@ -7,11 +6,12 @@
 }
 
 #sidebar-wrapper {
-  display: flex;
   width: 20%;
+  background-color: #282b2f;
+  padding: 20px;
 }
 
 #router-wrapper {
-  display: flex;
+  margin: 20px;
   width: 80%;
 }
