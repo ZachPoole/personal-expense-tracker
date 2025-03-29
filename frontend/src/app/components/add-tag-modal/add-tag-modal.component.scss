@@ -1,0 +1,9 @@
+@import '../../../variables';
+
+#close-modal-button {
+    background-color: $red-pastel;
+    padding: 10px;
+    border-radius: 15px;
+    
+    box-shadow: inset 0 0 2px red;
+}

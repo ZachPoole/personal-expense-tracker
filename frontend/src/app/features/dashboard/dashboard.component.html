@@ -4,9 +4,5 @@
   <div id="transaction-list">
     <app-transaction-card *ngFor="let transaction of mockTransactions" [transaction]="transaction"></app-transaction-card>
   </div>
-
-  <div *ngIf="showModal" id="add-tag-modal-wrapper">
-    <app-add-tag-modal></app-add-tag-modal>
-  </div>
   
 </div>

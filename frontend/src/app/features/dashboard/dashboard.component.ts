@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { Transaction } from '../../models/models';
 import { CommonModule } from '@angular/common';
-import { AddTagModalComponent } from '../../components/add-tag-modal/add-tag-modal.component';
 import { TransactionCardComponent } from '../../components/transaction-card/transaction-card.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, AddTagModalComponent, TransactionCardComponent],
+  imports: [CommonModule, TransactionCardComponent],
   standalone: true,
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -65,7 +64,6 @@ export class DashboardComponent {
     }
 ];
 
-showModal = false;
 
 
 }
