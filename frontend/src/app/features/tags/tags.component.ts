@@ -10,27 +10,27 @@ import { Tag } from '../../models/models';
 })
 export class TagsComponent {
   mockTags: Tag[] = [
-    { transactionName: 'Grocery Shopping', tagName: 'Food', color: 'red' },
+    { transactionName: 'Grocery Shopping', tagName: 'Food', color: 'blue' },
     {
       transactionName: 'Grocery Shopping',
       tagName: 'Essentials',
-      color: 'green',
+      color: 'blue',
     },
     { transactionName: 'Electric Bill', tagName: 'Utilities', color: 'blue' },
-    { transactionName: 'Dinner Out', tagName: 'Entertainment', color: 'pink' },
-    { transactionName: 'Dinner Out', tagName: 'Food', color: 'yellow' },
+    { transactionName: 'Dinner Out', tagName: 'Entertainment', color: 'blue' },
+    { transactionName: 'Dinner Out', tagName: 'Food', color: 'blue' },
     {
       transactionName: 'Gas Refill',
       tagName: 'Transportation',
-      color: 'purple',
+      color: 'blue',
     },
-    { transactionName: 'Gym Membership', tagName: 'Health', color: 'cyan' },
+    { transactionName: 'Gym Membership', tagName: 'Health', color: 'blue' },
     {
       transactionName: 'Movie Night',
       tagName: 'Entertainment',
-      color: 'orange',
+      color: 'blue',
     },
-    { transactionName: 'Online Shopping', tagName: 'Retail', color: 'lime' },
-    { transactionName: 'Car Repair', tagName: 'Maintenance', color: 'violet' },
+    { transactionName: 'Online Shopping', tagName: 'Retail', color: 'blue' },
+    { transactionName: 'Car Repair', tagName: 'Maintenance', color: 'blue' },
   ];
 }

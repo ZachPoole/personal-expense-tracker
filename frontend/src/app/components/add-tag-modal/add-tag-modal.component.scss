@@ -1,8 +1,9 @@
-@import "../../../variables";
+@use "../../styles/variables" as *;
 
 #add-tag-modal-component {
   #add-tag-modal-header {
     display: flex;
+    justify-content: space-between;
     h1 {
       font-size: 24px !important;
       margin-bottom: 15px;

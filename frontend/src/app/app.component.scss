@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../app/styles/variables" as *;
 
 #site-wrapper {
   background-color: $light-gray-background;
