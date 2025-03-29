@@ -25,7 +25,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain(
-      'Hello, personal-expense-tracker-frontend'
+      'Hello, personal-expense-tracker-frontend',
     );
   });
 });

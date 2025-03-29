@@ -1,4 +1,4 @@
-@import '../../../variables';
+@import "../../../variables";
 
 #sidebar {
   display: flex;
@@ -21,7 +21,6 @@
   .active-link {
     background-color: $light-green-accent;
     box-shadow: inset 0 0 2px $green-accent;
-    
 
     &:hover {
       cursor: default;

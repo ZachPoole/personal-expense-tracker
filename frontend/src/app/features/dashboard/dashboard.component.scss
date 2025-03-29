@@ -19,11 +19,10 @@
 
     app-transaction-card {
       flex: 1;
-      min-width: 100%
+      min-width: 100%;
     }
   }
 }
- 
 
 #add-tag-modal-wrapper {
   display: flex;
@@ -31,18 +30,18 @@
   z-index: 1;
   left: 0;
   top: 0;
-  width: 100%; 
+  width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */    
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 
   app-add-tag-modal {
-      background-color: #fefefe;
-      margin: 10% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 500px;
-      height: 500px;
-      border-radius: 15px;
+    background-color: $light-gray-background;
+    margin: 10% auto;
+    padding: 20px;
+    box-shadow: inset 0 0 2px $light-gray-background;
+    width: 500px;
+    height: 500px;
+    border-radius: 15px;
   }
 }

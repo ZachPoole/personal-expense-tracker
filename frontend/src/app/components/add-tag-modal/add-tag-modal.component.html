@@ -1,7 +1,13 @@
-<div id="add-tag-modal-componenet">
-    <h1 id="add-tag-modal-header">Add Tag</h1> 
+<div id="add-tag-modal-component">
+  <div id="add-tag-modal-header">
+    <h1>Add Tag</h1>
     <button id="close-modal-button" (click)="closeClicked()">close</button>
-    <div id="current-transcation">
-        <app-transaction-card [transaction]="transactionSelected()" [showButton]="false"></app-transaction-card>
-    </div>
+  </div>
+
+  <div id="current-transcation">
+    <app-transaction-card
+      [transaction]="transactionSelected()"
+      [showButton]="false"
+    ></app-transaction-card>
+  </div>
 </div>
