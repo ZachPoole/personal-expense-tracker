@@ -10,21 +10,33 @@
     h1 {
       font-size: 24px !important;
     }
-  }
-}
-#close-modal-wrapper {
-  display: flex;
-  height: max-content;
 
-  &:hover {
-    cursor: pointer;
+    #close-modal-wrapper {
+      display: flex;
+      height: max-content;
 
-    #close-modal-button {
-      color: red;
+      &:hover {
+        cursor: pointer;
+
+        #close-modal-button {
+          color: red;
+        }
+      }
+
+      #close-modal-button {
+        color: $red-pastel;
+      }
     }
   }
 
-  #close-modal-button {
-    color: $red-pastel;
+  #current-transcation {
+    display: block;
+    margin-bottom: 15px;
+  }
+
+  #tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 }

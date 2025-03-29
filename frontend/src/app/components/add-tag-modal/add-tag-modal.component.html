@@ -12,4 +12,8 @@
       [showButton]="false"
     ></app-transaction-card>
   </div>
+
+  <div id="tag-list">
+    <app-tag *ngFor="let tag of tags()" [tag]="tag"></app-tag>
+  </div>
 </div>
