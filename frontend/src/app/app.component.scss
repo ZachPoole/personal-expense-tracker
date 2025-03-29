@@ -1,9 +1,8 @@
 #site-wrapper {
   background-color: #222529;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: row;
-  overflow: scroll;
   align-items: stretch;
 }
 
@@ -18,5 +17,5 @@
 #router-wrapper {
   margin: 20px;
   width: 80%;
-  height: 100%;
+  overflow: scroll;
 }
