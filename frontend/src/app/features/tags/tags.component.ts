@@ -3,11 +3,10 @@ import { Component } from '@angular/core';
 import { Tag } from '../../models/models';
 
 @Component({
-  selector: 'app-tags',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './tags.component.html',
-  styleUrl: './tags.component.scss',
+    selector: 'app-tags',
+    imports: [CommonModule],
+    templateUrl: './tags.component.html',
+    styleUrl: './tags.component.scss'
 })
 export class TagsComponent {
 

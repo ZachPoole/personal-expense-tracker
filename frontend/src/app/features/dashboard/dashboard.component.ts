@@ -4,11 +4,10 @@ import { CommonModule } from '@angular/common';
 import { TransactionCardComponent } from '../../components/transaction-card/transaction-card.component';
 
 @Component({
-  selector: 'app-dashboard',
-  imports: [CommonModule, TransactionCardComponent],
-  standalone: true,
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+    selector: 'app-dashboard',
+    imports: [CommonModule, TransactionCardComponent],
+    templateUrl: './dashboard.component.html',
+    styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
   mockTransactions: Transaction[] = [

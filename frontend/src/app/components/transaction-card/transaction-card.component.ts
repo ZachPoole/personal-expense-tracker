@@ -4,11 +4,10 @@ import { CommonModule } from '@angular/common';
 import { AddTagModalComponent } from '../add-tag-modal/add-tag-modal.component';
 
 @Component({
-  selector: 'app-transaction-card',
-  standalone: true,
-  imports: [CommonModule, AddTagModalComponent],
-  templateUrl: './transaction-card.component.html',
-  styleUrl: './transaction-card.component.scss'
+    selector: 'app-transaction-card',
+    imports: [CommonModule, AddTagModalComponent],
+    templateUrl: './transaction-card.component.html',
+    styleUrl: './transaction-card.component.scss'
 })
 export class TransactionCardComponent implements OnChanges {
   test: Transaction = {
