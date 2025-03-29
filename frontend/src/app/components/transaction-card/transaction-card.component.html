@@ -1,10 +1,7 @@
-<div *ngIf="transaction != null && transaction != undefined" class="transaction-card">
-    <!-- <p>{{ transaction.transactionName }}</p>
-    <p>{{ transaction.amount | currency}}</p>
-    <p>{{ transaction.dateCreated | date: 'shortDate'}}</p> -->
-    <button (click)="addTagClicked()" *ngIf="showButton" id="add-tag-button">+ Add Tag</button>
+<div class="transaction-card">
+    <p>{{ transaction().transactionName }}</p>
+    <p>{{ transaction().amount | currency}}</p>
+    <p>{{ transaction().dateCreated | date: 'shortDate'}}</p>
+    <button (click)="handleAddTagClicked()" *ngIf="showButton()" id="add-tag-button">+ Add Tag</button>
 </div>
 
-<div *ngIf="showModal" id="add-tag-modal-wrapper">
-    <app-add-tag-modal [transactionSelected]="test"></app-add-tag-modal>
-</div>

@@ -24,25 +24,3 @@
     }
 
 }
-
-#add-tag-modal-wrapper {
-    display: flex;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%; 
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */    
-
-    app-add-tag-modal {
-        background-color: #fefefe;
-        margin: 10% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 500px;
-        height: 500px;
-        border-radius: 15px;
-    }
-}

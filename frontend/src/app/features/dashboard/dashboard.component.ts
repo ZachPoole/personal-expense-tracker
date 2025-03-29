@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, effect, OnChanges, signal, SimpleChanges } from '@angular/core';
 import { Transaction } from '../../models/models';
 import { CommonModule } from '@angular/common';
 import { TransactionCardComponent } from '../../components/transaction-card/transaction-card.component';
+import { AddTagModalComponent } from '../../components/add-tag-modal/add-tag-modal.component';
 
 @Component({
     selector: 'app-dashboard',
-    imports: [CommonModule, TransactionCardComponent],
+    imports: [CommonModule, TransactionCardComponent, AddTagModalComponent],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
 })
@@ -63,6 +64,17 @@ export class DashboardComponent {
     }
 ];
 
+  transactionSelected = signal<Transaction>( {transactionName: "", amount: 0, dateCreated: new Date()});
+  showModal = signal(false)
+
+  addTagClicked(transaction: Transaction) {
+    this.transactionSelected.set(transaction)
+    this.showModal.set(true);
+  }
+
+  closeModalClicked() {
+    this.showModal.set(false);
+  }
 
 
 }

@@ -2,7 +2,11 @@
   <h1 id="dashboard-header">Tagless Transactions</h1>
   
   <div id="transaction-list">
-    <app-transaction-card *ngFor="let transaction of mockTransactions" [transaction]="transaction"></app-transaction-card>
+    <app-transaction-card (addTagClicked)="addTagClicked($event)" *ngFor="let transaction of mockTransactions" [transaction]="transaction"></app-transaction-card>
   </div>
   
+</div>
+
+<div *ngIf="showModal()" id="add-tag-modal-wrapper">
+  <app-add-tag-modal (closeModalClicked)="closeModalClicked()" [transactionSelected]="transactionSelected()"></app-add-tag-modal>
 </div>
