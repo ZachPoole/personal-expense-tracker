@@ -1,5 +1,6 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
+@use "app/styles/reset";
 @use "@angular/material" as mat;
 
 html {
@@ -15,9 +16,6 @@ html {
     )
   );
 }
-
-/* You can add global styles to this file, and also import other style files */
-@use "app/styles/reset";
 
 body {
   overflow: hidden;
