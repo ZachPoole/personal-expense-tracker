@@ -1,8 +1,9 @@
 <div id="tags-component">
-  <p>Tagless Transactions</p>
-  <div id="transaction-list">
-    <div class="transaction-card" *ngFor="let transaction of mockTransactions">
-      {{ transaction.amount }}
+    <p>Tags</p>
+    <div id="tag-list">
+      <div class="tag-card" *ngFor="let tag of mockTags">
+        <p>{{ tag.tagName }}</p>
+      </div>
     </div>
   </div>
-</div>
+  

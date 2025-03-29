@@ -1,6 +1,8 @@
+@import '../variables';
+
 #site-wrapper {
-  background-color: #222529;
-  height: 100vh;
+  background-color: $light-gray-background;
+    height: 100vh;
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -9,9 +11,10 @@
 #sidebar-wrapper {
   align-items: stretch;
   width: 20%;
-  background-color: #282b2f;
+  background-color: $light-background;
   padding: 20px;
   flex-grow: 1;
+  box-shadow: 0 6px 10px $box-shadow-color;
 }
 
 #router-wrapper {
