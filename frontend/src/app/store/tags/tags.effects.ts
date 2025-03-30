@@ -3,9 +3,10 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, withLatestFrom } from 'rxjs/operators';
 import { TagsActions } from './tags.actions';
-import { selectTransactions } from './tags.selectors';
 import { Tag } from './tags.model';
 import { TransactionsActions } from '../transactions/transactions.actions';
+import { Transaction } from '../transactions/transactions.model';
+import { selectTransactions } from '../transactions/transactions.selectors';
 
 @Injectable()
 export class TagEffects {
@@ -17,10 +18,14 @@ export class TagEffects {
       ofType(TagsActions.tagDeleted), // When deleteTag action is dispatched
       withLatestFrom(this.store.select(selectTransactions)), // Get current transactions
       map(([action, transactions]) => {
-        const updatedTransactions = transactions.map((transaction) => ({
-          ...transaction,
-          tags: transaction.tags.filter((tag: Tag) => tag.id !== action.tagId), // Remove tag from transactions
-        }));
+        const updatedTransactions = transactions.map(
+          (transaction: Transaction) => ({
+            ...transaction,
+            tags: transaction.tags.filter(
+              (tag: Tag) => tag.id !== action.tagId
+            ), // Remove tag from transactions
+          })
+        );
 
         return TransactionsActions.allTransactionTagsUpdated({
           transactions: updatedTransactions,
