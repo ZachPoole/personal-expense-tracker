@@ -1,19 +1,32 @@
 <div id="add-tag-modal-component">
-  <div id="add-tag-modal-header">
-    <h1>Add Tag</h1>
-    <div id="close-modal-wrapper" (click)="closeClicked()">
-      <mat-icon id="close-modal-button">close</mat-icon>
+  <div id="modal-body">
+    <div id="add-tag-modal-header">
+      <h1>Add Tag</h1>
+      <div id="close-modal-wrapper" (click)="closeClicked()">
+        <mat-icon id="close-modal-button">close</mat-icon>
+      </div>
+    </div>
+
+    <div id="current-transcation">
+      <app-transaction-card
+        [transaction]="transactionSelected()"
+        [showButton]="false"
+      ></app-transaction-card>
+    </div>
+
+    <div id="tag-list">
+      <app-tag
+        *ngFor="let tag of tags()"
+        [tag]="tag"
+        [clickable]="true"
+        (tagClicked)="handleTagClicked($event)"
+        [disabled]="tag.selected"
+      ></app-tag>
     </div>
   </div>
 
-  <div id="current-transcation">
-    <app-transaction-card
-      [transaction]="transactionSelected()"
-      [showButton]="false"
-    ></app-transaction-card>
-  </div>
-
-  <div id="tag-list">
-    <app-tag *ngFor="let tag of tags$ | async" [tag]="tag"></app-tag>
+  <div id="modal-footer">
+    <button (click)="handleSaveClicked()" id="save-button">Save</button>
+    <button (click)="handleCancelClicked()" id="cancel-button">Cancel</button>
   </div>
 </div>

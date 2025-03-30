@@ -8,6 +8,14 @@
   box-shadow: inset 0 0 2px $green-accent;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
+.disabled {
+  background-color: $light-background !important;
+}
+
 $color-map: (
   "red": $red-pastel,
   "orange": $orange-pastel,

@@ -8,6 +8,9 @@ import { initialState, mockTags } from '../../store/tags/tags.reducers';
 import { select, Store } from '@ngrx/store';
 import { selectTags } from '../../store/tags/tags.selectors';
 import { TagsActions } from '../../store/tags/tags.actions';
+import { Tag, TagSelected } from '../../store/tags/tags.model';
+import { map, Observable } from 'rxjs';
+import { TransactionsActions } from '../../store/transactions/transactions.actions';
 
 @Component({
   selector: 'app-add-tag-modal',
@@ -17,11 +20,12 @@ import { TagsActions } from '../../store/tags/tags.actions';
     MatIconModule,
     TagComponent,
   ],
+  standalone: true,
   templateUrl: './add-tag-modal.component.html',
   styleUrl: './add-tag-modal.component.scss',
 })
 export class AddTagModalComponent implements OnInit {
-  tags$: any;
+  tags = signal<TagSelected[]>([]);
 
   transactionSelected = input.required<Transaction>();
   closeModalClicked = output();
@@ -29,11 +33,48 @@ export class AddTagModalComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.tags$ = this.store.select(selectTags);
+    this.store
+      .select(selectTags)
+      .pipe(
+        map((tagsArray) => {
+          return tagsArray.map((tag) => ({
+            ...tag,
+            selected: false,
+          }));
+        })
+      )
+      .subscribe((tagsWithSelectionArray: TagSelected[]) =>
+        this.tags.set(tagsWithSelectionArray)
+      );
     this.store.dispatch(TagsActions.tagsRetreived({ tags: initialState }));
   }
 
   closeClicked() {
+    this.closeModalClicked.emit();
+  }
+
+  handleTagClicked(selectedTag: Tag) {
+    this.tags.update((tagsArray: TagSelected[]) =>
+      tagsArray.map((tag) => {
+        if (tag.id === selectedTag.id) {
+          return { ...tag, selected: true };
+        } else {
+          return tag;
+        }
+      })
+    );
+  }
+
+  handleSaveClicked() {
+    this.store.dispatch(
+      TransactionsActions.transactionTagsUpdated({
+        transactionId: this.transactionSelected().id,
+        tags: this.tags(),
+      })
+    );
+  }
+
+  handleCancelClicked() {
     this.closeModalClicked.emit();
   }
 }

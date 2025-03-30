@@ -1,3 +1,8 @@
-<div id="tag-wrapper" [class]="'bg-' + tag().color">
+<div
+  id="tag-wrapper"
+  [ngClass]="{ clickable: clickable() && !disabled(), disabled: disabled() }"
+  [class]="'bg-' + tag().color"
+  (click)="handleTagClicked()"
+>
   <p>{{ tag().name }}</p>
 </div>

@@ -1,42 +1,80 @@
 @use "../../styles/variables" as *;
 
 #add-tag-modal-component {
-  #add-tag-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
 
-    h1 {
-      font-size: 24px !important;
-    }
-
-    #close-modal-wrapper {
+  #modal-body {
+    #add-tag-modal-header {
       display: flex;
-      height: max-content;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
 
-      &:hover {
-        cursor: pointer;
+      h1 {
+        font-size: 24px !important;
+      }
+
+      #close-modal-wrapper {
+        display: flex;
+        height: max-content;
+
+        &:hover {
+          cursor: pointer;
+
+          #close-modal-button {
+            color: red;
+          }
+        }
 
         #close-modal-button {
-          color: red;
+          color: $red-pastel;
         }
       }
+    }
 
-      #close-modal-button {
-        color: $red-pastel;
-      }
+    #current-transcation {
+      display: block;
+      margin-bottom: 15px;
+    }
+
+    #tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
   }
 
-  #current-transcation {
-    display: block;
-    margin-bottom: 15px;
-  }
-
-  #tag-list {
+  #modal-footer {
     display: flex;
-    flex-wrap: wrap;
+    justify-content: flex-end;
+    width: 100%;
     gap: 10px;
+
+    #save-button {
+      width: fit-content;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: transparent;
+      box-shadow: inset 0 0 2px green;
+
+      &:hover {
+        background-color: $green-pastel;
+      }
+    }
+
+    #cancel-button {
+      width: fit-content;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: transparent;
+      box-shadow: inset 0 0 2px red;
+
+      &:hover {
+        background-color: $red-pastel;
+      }
+    }
   }
 }

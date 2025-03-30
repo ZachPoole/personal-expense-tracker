@@ -3,3 +3,7 @@ export interface Tag {
   name: string;
   color: string;
 }
+
+export interface TagSelected extends Tag {
+  selected: boolean;
+}
