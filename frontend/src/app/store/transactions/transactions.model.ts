@@ -1,4 +1,4 @@
-import { Tag } from '../models/models';
+import { Tag } from '../tags/tags.model';
 
 export interface Transaction {
   id: string;

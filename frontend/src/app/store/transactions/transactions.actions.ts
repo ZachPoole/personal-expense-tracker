@@ -1,13 +1,14 @@
 import { createActionGroup, props } from '@ngrx/store';
-import { Tag } from '../models/models';
 import { Transaction } from './transactions.model';
+import { Tag } from '../tags/tags.model';
 
 export const TransactionsActions = createActionGroup({
   source: 'Transactions',
   events: {
-    'Transaction Tags Updated': props<{ transactionId: string; tags: Tag[] }>(),
     'Transactions Retreived': props<{
       transactions: Transaction[];
     }>(),
+    'Transaction Tags Updated': props<{ transactionId: string; tags: Tag[] }>(),
+    'All Transaction Tags Updated': props<{ transactions: Transaction[] }>(),
   },
 });

@@ -1,6 +1,6 @@
 import { Component, computed, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Transaction } from '../../store/transactions.model';
+import { Transaction } from '../../store/transactions/transactions.model';
 
 @Component({
   selector: 'app-transaction-card',

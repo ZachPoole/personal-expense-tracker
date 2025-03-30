@@ -10,10 +10,10 @@ import { CommonModule } from '@angular/common';
 import { TransactionCardComponent } from '../../components/transaction-card/transaction-card.component';
 import { AddTagModalComponent } from '../../components/add-tag-modal/add-tag-modal.component';
 import { select, Store } from '@ngrx/store';
-import { Transaction } from '../../store/transactions.model';
-import { selectTransactions } from '../../store/transactions.selectors';
-import { TransactionsActions } from '../../store/transactions.actions';
-import { initialState } from '../../store/transactions.reducers';
+import { Transaction } from '../../store/transactions/transactions.model';
+import { selectTransactions } from '../../store/transactions/transactions.selectors';
+import { TransactionsActions } from '../../store/transactions/transactions.actions';
+import { initialState } from '../../store/transactions/transactions.reducers';
 
 @Component({
   selector: 'app-dashboard',

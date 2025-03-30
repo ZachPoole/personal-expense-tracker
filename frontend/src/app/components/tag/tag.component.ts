@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
-import { Tag } from '../../models/models';
 import { CommonModule } from '@angular/common';
+import { Tag } from '../../store/tags/tags.model';
 
 @Component({
   selector: 'app-tag',
