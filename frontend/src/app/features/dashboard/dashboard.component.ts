@@ -22,7 +22,6 @@ import { initialState } from '../../store/transactions/transactions.reducers';
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements OnInit {
-  transactions: any;
   transactionSelected = signal<Transaction>({
     id: '',
     name: '',
@@ -30,6 +29,7 @@ export class DashboardComponent implements OnInit {
     dateCreated: new Date(),
     tags: [],
   });
+
   showModal = signal(false);
 
   transactions$: any;

@@ -5,12 +5,13 @@ import { provideStore } from '@ngrx/store';
 import { transactionsReducer } from './store/transactions/transactions.reducers';
 import { provideEffects } from '@ngrx/effects';
 import { TagEffects } from './store/tags/tags.effects';
+import { tagsReducer } from './store/tags/tags.reducers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideStore({ transactions: transactionsReducer }),
+    provideStore({ transactions: transactionsReducer, tags: tagsReducer }),
     provideEffects([TagEffects]),
   ],
 };

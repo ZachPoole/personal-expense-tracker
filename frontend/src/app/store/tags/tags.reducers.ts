@@ -1,5 +1,4 @@
 import { createReducer, on } from '@ngrx/store';
-import { Transaction } from '../transactions/transactions.model';
 import { Tag } from './tags.model';
 import { TagsActions } from './tags.actions';
 
@@ -56,7 +55,7 @@ export const mockTags: Tag[] = [
   },
 ];
 
-export const initialState: Tag[] = [];
+export const initialState: Tag[] = mockTags;
 
 export const tagsReducer = createReducer(
   initialState,

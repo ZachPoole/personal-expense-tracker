@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, withLatestFrom } from 'rxjs/operators';
@@ -10,7 +10,8 @@ import { selectTransactions } from '../transactions/transactions.selectors';
 
 @Injectable()
 export class TagEffects {
-  constructor(private actions$: Actions, private store: Store) {}
+  actions$ = inject(Actions);
+  store = inject(Store);
 
   // Listen for deleteTag action and trigger updateTransactions action
   deleteTagEffect$ = createEffect(() =>
