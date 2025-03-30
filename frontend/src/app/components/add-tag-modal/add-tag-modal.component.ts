@@ -69,9 +69,10 @@ export class AddTagModalComponent implements OnInit {
     this.store.dispatch(
       TransactionsActions.transactionTagsUpdated({
         transactionId: this.transactionSelected().id,
-        tags: this.tags(),
+        tags: this.tags().filter((tag) => tag.selected),
       })
     );
+    this.closeModalClicked.emit();
   }
 
   handleCancelClicked() {

@@ -8,31 +8,14 @@ export const mockTransactions: Transaction[] = [
     name: 'Grocery Shopping',
     amount: 150.75,
     dateCreated: new Date('2024-03-25T10:30:00Z'),
-    tags: [
-      {
-        id: '8b2fefcf-524d-4a05-91e2-98eca2494ae8',
-        name: 'Food',
-        color: 'red',
-      },
-      {
-        id: '10442c98-b63e-4617-bd52-6fe6299122fd',
-        name: 'Essentials',
-        color: 'orange',
-      },
-    ],
+    tags: [],
   },
   {
     id: '1a9f4b56-8439-4f77-8b19-60e514c934ea',
     name: 'Electric Bill',
     amount: 90.25,
     dateCreated: new Date('2024-03-20T08:15:00Z'),
-    tags: [
-      {
-        id: '55f592e3-1a77-4d7d-beca-6077a1f9c79e',
-        name: 'Utilities',
-        color: 'yellow',
-      },
-    ],
+    tags: [],
   },
   {
     id: 'bdf4c3a0-77a4-4669-91fd-1463e12b759b',

@@ -15,7 +15,7 @@ export const mockTags: Tag[] = [
   },
   {
     id: '55f592e3-1a77-4d7d-beca-6077a1f9c79e',
-    name: 'Utilities',
+    name: 'Tennis',
     color: 'yellow',
   },
   {
@@ -25,7 +25,7 @@ export const mockTags: Tag[] = [
   },
   {
     id: 'c6dd2b34-f991-4d3c-a2ae-b211c275a633',
-    name: 'Food',
+    name: 'Utilities',
     color: 'blue',
   },
   {

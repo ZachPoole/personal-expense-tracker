@@ -11,7 +11,10 @@ import { TransactionCardComponent } from '../../components/transaction-card/tran
 import { AddTagModalComponent } from '../../components/add-tag-modal/add-tag-modal.component';
 import { select, Store } from '@ngrx/store';
 import { Transaction } from '../../store/transactions/transactions.model';
-import { selectTransactions } from '../../store/transactions/transactions.selectors';
+import {
+  selectTaglessTransasctions,
+  selectTransactions,
+} from '../../store/transactions/transactions.selectors';
 import { TransactionsActions } from '../../store/transactions/transactions.actions';
 import { initialState } from '../../store/transactions/transactions.reducers';
 
@@ -36,7 +39,7 @@ export class DashboardComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.transactions$ = this.store.select(selectTransactions);
+    this.transactions$ = this.store.select(selectTaglessTransasctions);
 
     this.store.dispatch(
       TransactionsActions.transactionsRetreived({ transactions: initialState })
