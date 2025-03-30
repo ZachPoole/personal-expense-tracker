@@ -1,12 +1,5 @@
 export interface Tag {
-  tagId: string;
-  tagName: string;
+  id: string;
+  name: string;
   color: string;
-}
-
-export interface Transaction {
-  transactionName: string;
-  amount: number;
-  dateCreated: Date;
-  tags: Tag[] | [];
 }

@@ -4,7 +4,7 @@
   <div id="transaction-list">
     <app-transaction-card
       (addTagClicked)="addTagClicked($event)"
-      *ngFor="let transaction of mockTransactions"
+      *ngFor="let transaction of transactions$ | async"
       [transaction]="transaction"
     ></app-transaction-card>
   </div>

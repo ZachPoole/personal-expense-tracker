@@ -1,10 +1,10 @@
 import { Component, input, output, signal } from '@angular/core';
-import { Transaction } from '../../models/models';
 import { TransactionCardComponent } from '../transaction-card/transaction-card.component';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { mockTags } from '../../features/tags/tags.component';
 import { TagComponent } from '../tag/tag.component';
+import { Transaction } from '../../store/transactions.model';
 
 @Component({
   selector: 'app-add-tag-modal',

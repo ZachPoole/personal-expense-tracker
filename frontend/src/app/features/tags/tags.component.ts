@@ -4,53 +4,53 @@ import { Tag } from '../../models/models';
 
 export const mockTags: Tag[] = [
   {
-    tagId: '8b2fefcf-524d-4a05-91e2-98eca2494ae8',
-    tagName: 'Food',
+    id: '8b2fefcf-524d-4a05-91e2-98eca2494ae8',
+    name: 'Food',
     color: 'red',
   },
   {
-    tagId: '10442c98-b63e-4617-bd52-6fe6299122fd',
-    tagName: 'Essentials',
+    id: '10442c98-b63e-4617-bd52-6fe6299122fd',
+    name: 'Essentials',
     color: 'orange',
   },
   {
-    tagId: '55f592e3-1a77-4d7d-beca-6077a1f9c79e',
-    tagName: 'Utilities',
+    id: '55f592e3-1a77-4d7d-beca-6077a1f9c79e',
+    name: 'Utilities',
     color: 'yellow',
   },
   {
-    tagId: 'b0f8eae0-ec28-433a-9dbe-f8f6e64ed4bd',
-    tagName: 'Entertainment',
+    id: 'b0f8eae0-ec28-433a-9dbe-f8f6e64ed4bd',
+    name: 'Entertainment',
     color: 'green',
   },
   {
-    tagId: 'c6dd2b34-f991-4d3c-a2ae-b211c275a633',
-    tagName: 'Food',
+    id: 'c6dd2b34-f991-4d3c-a2ae-b211c275a633',
+    name: 'Food',
     color: 'blue',
   },
   {
-    tagId: '0eef4293-d958-4cc2-b213-913bbcfe5d4f',
-    tagName: 'Transportation',
+    id: '0eef4293-d958-4cc2-b213-913bbcfe5d4f',
+    name: 'Transportation',
     color: 'indigo',
   },
   {
-    tagId: '7be4efce-e20f-46cf-a5f6-ecf9d2c81dbe',
-    tagName: 'Health',
+    id: '7be4efce-e20f-46cf-a5f6-ecf9d2c81dbe',
+    name: 'Health',
     color: 'violet',
   },
   {
-    tagId: '52aa0107-91a3-496b-8863-eac359c15037',
-    tagName: 'Entertainment',
+    id: '52aa0107-91a3-496b-8863-eac359c15037',
+    name: 'Entertainment',
     color: 'pink',
   },
   {
-    tagId: 'a7dd49e2-614d-4741-8051-221288d35530',
-    tagName: 'Retail',
+    id: 'a7dd49e2-614d-4741-8051-221288d35530',
+    name: 'Retail',
     color: 'blue',
   },
   {
-    tagId: '2cbe613b-0b92-482e-b586-0a75fdd6c8f1',
-    tagName: 'Maintenance',
+    id: '2cbe613b-0b92-482e-b586-0a75fdd6c8f1',
+    name: 'Maintenance',
     color: 'blue',
   },
 ];

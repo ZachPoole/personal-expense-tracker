@@ -1,7 +1,7 @@
 <div [class]="{ 'text-center': inModal() }" class="transaction-card">
-  <p>{{ transaction().transactionName }}</p>
+  <p>{{ transaction().name }}</p>
   <p>{{ transaction().amount | currency }}</p>
-  <p>{{ transaction().dateCreated | date: "shortDate" }}</p>
+  <p>{{ transaction().dateCreated | date : "shortDate" }}</p>
   <button
     (click)="handleAddTagClicked()"
     *ngIf="showButton()"
