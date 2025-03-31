@@ -1,30 +1,37 @@
 @use "../../styles/variables" as *;
 
-:host {
-  display: flex;
-}
-
 .transaction-card {
-  display: grid;
-  align-items: center;
-  grid-template-columns: 1fr 1fr 1fr auto;
-  grid-gap: 15px;
+  display: flex;
+  flex-direction: column;
   background-color: $light-background;
   width: 100%;
+  gap: 10px;
   padding: 15px;
   border-radius: 10px;
 
-  #add-tag-button {
-    width: fit-content;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: $light-green-accent;
-    box-shadow: inset 0 0 2px $green-accent;
+  #data-section {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    align-items: center;
+
+    #add-tag-button {
+      width: fit-content;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: $light-green-accent;
+      box-shadow: inset 0 0 2px $green-accent;
+    }
+  }
+
+  #tag-list {
+    display: flex;
+    gap: 10px;
   }
 }
 
 .text-center {
   p {
-    text-align: center;
+    // text-align: center;
   }
 }

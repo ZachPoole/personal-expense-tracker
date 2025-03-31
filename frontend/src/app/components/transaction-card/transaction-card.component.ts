@@ -1,10 +1,12 @@
 import { Component, computed, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Transaction } from '../../store/transactions/transactions.model';
+import { TagsManagementComponent } from '../../features/tags/tagsManagement.component';
+import { TagComponent } from '../tag/tag.component';
 
 @Component({
   selector: 'app-transaction-card',
-  imports: [CommonModule],
+  imports: [CommonModule, TagComponent],
   templateUrl: './transaction-card.component.html',
   styleUrl: './transaction-card.component.scss',
 })

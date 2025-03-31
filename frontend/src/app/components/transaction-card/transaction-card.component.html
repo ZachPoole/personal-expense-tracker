@@ -1,12 +1,18 @@
 <div [class]="{ 'text-center': inModal() }" class="transaction-card">
-  <p>{{ transaction().name }}</p>
-  <p>{{ transaction().amount | currency }}</p>
-  <p>{{ transaction().dateCreated | date : "shortDate" }}</p>
-  <button
-    (click)="handleAddTagClicked()"
-    *ngIf="showButton()"
-    id="add-tag-button"
-  >
-    + Add Tag
-  </button>
+  <div id="data-section">
+    <p>{{ transaction().name }}</p>
+    <p>{{ transaction().amount | currency }}</p>
+    <p>{{ transaction().dateCreated | date : "shortDate" }}</p>
+    <button
+      (click)="handleAddTagClicked()"
+      *ngIf="showButton()"
+      id="add-tag-button"
+    >
+      + Add Tag
+    </button>
+  </div>
+
+  <div *ngIf="transaction().tags.length > 0" id="tag-list">
+    <app-tag *ngFor="let tag of transaction().tags" [tag]="tag"></app-tag>
+  </div>
 </div>
