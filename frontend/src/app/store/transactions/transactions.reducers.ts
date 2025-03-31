@@ -29,9 +29,9 @@ export const mockTransactions: Transaction[] = [
         color: 'green',
       },
       {
-        id: 'c6dd2b34-f991-4d3c-a2ae-b211c275a633',
+        id: '8b2fefcf-524d-4a05-91e2-98eca2494ae8',
         name: 'Food',
-        color: 'blue',
+        color: 'red',
       },
     ],
   },
@@ -107,9 +107,9 @@ export const mockTransactions: Transaction[] = [
     dateCreated: new Date('2024-03-01T12:00:00Z'),
     tags: [
       {
-        id: '55f592e3-1a77-4d7d-beca-6077a1f9c79e',
+        id: 'c6dd2b34-f991-4d3c-a2ae-b211c275a633',
         name: 'Utilities',
-        color: 'yellow',
+        color: 'blue',
       },
       {
         id: '10442c98-b63e-4617-bd52-6fe6299122fd',

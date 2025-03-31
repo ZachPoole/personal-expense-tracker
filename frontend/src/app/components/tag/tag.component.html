@@ -1,6 +1,6 @@
 <div
   id="tag-wrapper"
-  [ngClass]="{ clickable: selectable() && !disabled(), disabled: disabled() }"
+  [ngClass]="{ selectable: selectable(), selected: selected() }"
   [class]="'bg-' + tag().color"
   (click)="handleTagSelected()"
 >

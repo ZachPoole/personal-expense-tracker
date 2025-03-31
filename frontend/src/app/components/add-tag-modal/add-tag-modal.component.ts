@@ -65,11 +65,11 @@ export class AddTagModalComponent implements OnInit {
     this.closeModalClicked.emit();
   }
 
-  handleTagSelected(selectedTag: Tag) {
+  handleTagSelected(selectedTag: TagSelected) {
     this.tags.update((tagsArray: TagSelected[]) =>
       tagsArray.map((tag) => {
         if (tag.id === selectedTag.id) {
-          return { ...tag, selected: true };
+          return { ...tag, selected: selectedTag.selected };
         } else {
           return tag;
         }

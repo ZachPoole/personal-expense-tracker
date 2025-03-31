@@ -16,11 +16,12 @@
   }
 }
 
-.clickable {
+.selectable {
   cursor: pointer;
 }
 
-.disabled {
+.selected {
+  cursor: pointer;
   opacity: 0.3;
 }
 

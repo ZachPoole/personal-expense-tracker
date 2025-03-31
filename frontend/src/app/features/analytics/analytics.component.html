@@ -1,9 +1,23 @@
 <div id="analytics-component">
   <h1 id="analytics-header">Transactions</h1>
+  <div>
+    <h2>Filter Transactions:</h2>
+    <div id="tag-list">
+      <app-tag
+        *ngFor="let tag of tags()"
+        [tag]="tag"
+        [selectable]="true"
+        (tagSelected)="handleTagSelected($event)"
+        [selected]="tag.selected"
+      ></app-tag>
+    </div>
+  </div>
+
+  <h2>Total for Transactions: {{ this.total() | currency }}</h2>
 
   <div id="transaction-list">
     <app-transaction-card
-      *ngFor="let transaction of transactions()"
+      *ngFor="let transaction of filteredTransactions()"
       [transaction]="transaction"
       [showButton]="false"
     ></app-transaction-card>

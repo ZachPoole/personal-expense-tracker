@@ -1,6 +1,6 @@
 import { Component, inject, input, model, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Tag } from '../../store/tags/tags.model';
+import { Tag, TagSelected } from '../../store/tags/tags.model';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { TagsActions } from '../../store/tags/tags.actions';
@@ -16,8 +16,8 @@ export class TagComponent {
 
   tag = input.required<Tag>();
   selectable = input<boolean>(false);
-  tagSelected = output<Tag>();
-  disabled = input<boolean>(false);
+  tagSelected = output<TagSelected>();
+  selected = input<boolean>(false);
   allowDelete = input<boolean>(false);
 
   getBackgroundColor() {
@@ -26,8 +26,8 @@ export class TagComponent {
   }
 
   handleTagSelected() {
-    if (this.selectable() && !this.disabled()) {
-      this.tagSelected.emit(this.tag());
+    if (this.selectable()) {
+      this.tagSelected.emit({ ...this.tag(), selected: !this.selected() });
     }
   }
 

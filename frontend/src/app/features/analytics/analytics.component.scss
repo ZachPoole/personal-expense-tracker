@@ -6,10 +6,17 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 10px;
 
   #analytics-header {
     font-size: 24px;
     margin-bottom: 15px;
+  }
+
+  #tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   #transaction-list {
