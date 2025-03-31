@@ -57,7 +57,6 @@ export class CreateTagModalComponent implements OnInit {
   ngOnInit(): void {
     this.tagForm.setControl('color', new FormControl(this.colorOptions[0]));
     this.tagForm.valueChanges.subscribe((newValue) => {
-      console.log(newValue.color);
       this.newTag.set({
         id: newValue.id!,
         name: newValue.name!,
@@ -71,7 +70,6 @@ export class CreateTagModalComponent implements OnInit {
   }
 
   handleCreateClicked() {
-    console.log(this.tagForm.value);
     if (this.newTag().name.trim() !== '') {
       this.store.dispatch(TagsActions.tagCreated({ tag: this.newTag() }));
       this.closeModalClicked.emit();
