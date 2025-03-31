@@ -15,7 +15,7 @@ import { tagsInitialState, mockTags } from '../../store/tags/tags.reducers';
 import { select, Store } from '@ngrx/store';
 import { selectTagsStoreState } from '../../store/tags/tags.selectors';
 import { TagsActions } from '../../store/tags/tags.actions';
-import { Tag, TagSelected } from '../../store/tags/tags.model';
+import { Tag, TagWithSelection } from '../../store/tags/tags.model';
 import { map, Observable } from 'rxjs';
 import { TransactionsActions } from '../../store/transactions/transactions.actions';
 
@@ -34,7 +34,7 @@ import { TransactionsActions } from '../../store/transactions/transactions.actio
 export class AddTagModalComponent implements OnInit {
   store = inject(Store);
 
-  tags = signal<TagSelected[]>([]);
+  tags = signal<TagWithSelection[]>([]);
   storeInitialized = false;
 
   transactionSelected = input.required<Transaction>();
@@ -52,7 +52,7 @@ export class AddTagModalComponent implements OnInit {
           }));
         })
       )
-      .subscribe((tagsWithSelectionArray: TagSelected[]) =>
+      .subscribe((tagsWithSelectionArray: TagWithSelection[]) =>
         this.tags.set(tagsWithSelectionArray)
       );
 
@@ -65,8 +65,8 @@ export class AddTagModalComponent implements OnInit {
     this.closeModalClicked.emit();
   }
 
-  handleTagSelected(selectedTag: TagSelected) {
-    this.tags.update((tagsArray: TagSelected[]) =>
+  handleTagSelected(selectedTag: TagWithSelection) {
+    this.tags.update((tagsArray: TagWithSelection[]) =>
       tagsArray.map((tag) => {
         if (tag.id === selectedTag.id) {
           return { ...tag, selected: selectedTag.selected };

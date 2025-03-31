@@ -12,7 +12,7 @@ import {
   mockTransactions,
   transactionsInitialState,
 } from '../../store/transactions/transactions.reducers';
-import { Tag, TagSelected } from '../../store/tags/tags.model';
+import { Tag, TagWithSelection } from '../../store/tags/tags.model';
 import { selectTagsStoreState } from '../../store/tags/tags.selectors';
 import { TagsActions } from '../../store/tags/tags.actions';
 import { mockTags } from '../../store/tags/tags.reducers';
@@ -30,7 +30,7 @@ export class AnalyticsComponent implements OnInit {
 
   transactions = signal<Transaction[]>([]);
   filteredTransactions = signal<Transaction[]>([]);
-  tags = signal<TagSelected[]>([]);
+  tags = signal<TagWithSelection[]>([]);
   selectedTags = new Set<string>();
 
   total = signal<number>(0);
@@ -59,7 +59,7 @@ export class AnalyticsComponent implements OnInit {
           }));
         })
       )
-      .subscribe((tagsWithSelectionArray: TagSelected[]) =>
+      .subscribe((tagsWithSelectionArray: TagWithSelection[]) =>
         this.tags.set(tagsWithSelectionArray)
       );
 
@@ -80,14 +80,14 @@ export class AnalyticsComponent implements OnInit {
     }
   }
 
-  handleTagSelected(selectedTag: TagSelected) {
+  handleTagSelected(selectedTag: TagWithSelection) {
     if (selectedTag.selected) {
       this.selectedTags.add(selectedTag.id);
     } else {
       this.selectedTags.delete(selectedTag.id);
     }
 
-    this.tags.update((tagsArray: TagSelected[]) =>
+    this.tags.update((tagsArray: TagWithSelection[]) =>
       tagsArray.map((tag) => {
         if (tag.id === selectedTag.id) {
           return { ...tag, selected: selectedTag.selected };

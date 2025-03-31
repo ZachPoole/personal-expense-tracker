@@ -1,6 +1,6 @@
 import { Component, inject, input, model, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Tag, TagSelected } from '../../store/tags/tags.model';
+import { Tag, TagWithSelection } from '../../store/tags/tags.model';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { TagsActions } from '../../store/tags/tags.actions';
@@ -16,7 +16,7 @@ export class TagComponent {
 
   tag = input.required<Tag>();
   selectable = input<boolean>(false);
-  tagSelected = output<TagSelected>();
+  tagSelected = output<TagWithSelection>();
   selected = input<boolean>(false);
   allowDelete = input<boolean>(false);
 

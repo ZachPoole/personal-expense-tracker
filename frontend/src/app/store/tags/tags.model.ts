@@ -4,7 +4,7 @@ export interface Tag {
   color: string;
 }
 
-export interface TagSelected extends Tag {
+export interface TagWithSelection extends Tag {
   selected: boolean;
 }
 
