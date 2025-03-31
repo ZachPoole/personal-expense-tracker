@@ -1,1 +1,26 @@
 @use "../../styles/variables" as *;
+
+#analytics-component {
+  width: 100%;
+  max-width: 625px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  #analytics-header {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  #transaction-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 10px;
+
+    app-transaction-card {
+      flex: 1;
+      min-width: 100%;
+    }
+  }
+}

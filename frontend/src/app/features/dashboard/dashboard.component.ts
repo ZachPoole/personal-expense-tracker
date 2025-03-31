@@ -16,7 +16,7 @@ import {
   selectTransactions,
 } from '../../store/transactions/transactions.selectors';
 import { TransactionsActions } from '../../store/transactions/transactions.actions';
-import { initialState } from '../../store/transactions/transactions.reducers';
+import { transactionsInitialState } from '../../store/transactions/transactions.reducers';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,16 +34,22 @@ export class DashboardComponent implements OnInit {
   });
 
   showModal = signal(false);
+  transactions = signal<Transaction[]>([]);
 
-  transactions$: any;
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.transactions$ = this.store.select(selectTaglessTransasctions);
+    this.store
+      .select(selectTaglessTransasctions)
+      .subscribe((transactions) => this.transactions.set(transactions));
 
-    this.store.dispatch(
-      TransactionsActions.transactionsRetreived({ transactions: initialState })
-    );
+    if (this.transactions.length === 0) {
+      this.store.dispatch(
+        TransactionsActions.transactionsRetreived({
+          transactions: transactionsInitialState,
+        })
+      );
+    }
   }
 
   addTagClicked(transaction: Transaction) {

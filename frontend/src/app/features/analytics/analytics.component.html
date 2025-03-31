@@ -1,1 +1,11 @@
-<p>analytics works!</p>
+<div id="analytics-component">
+  <h1 id="analytics-header">Transactions</h1>
+
+  <div id="transaction-list">
+    <app-transaction-card
+      *ngFor="let transaction of transactions()"
+      [transaction]="transaction"
+      [showButton]="false"
+    ></app-transaction-card>
+  </div>
+</div>

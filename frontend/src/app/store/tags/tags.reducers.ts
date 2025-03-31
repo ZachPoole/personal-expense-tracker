@@ -55,10 +55,10 @@ export const mockTags: Tag[] = [
   },
 ];
 
-export const initialState: Tag[] = mockTags;
+export const tagsInitialState: Tag[] = mockTags;
 
 export const tagsReducer = createReducer(
-  initialState,
+  tagsInitialState,
   on(TagsActions.tagsRetreived, (_state, { tags }) => tags),
   on(TagsActions.tagCreated, (_state, { tag }) => [..._state, tag]),
   on(TagsActions.tagDeleted, (_state, { tagId }) =>

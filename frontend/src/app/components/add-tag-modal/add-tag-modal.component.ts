@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TagComponent } from '../tag/tag.component';
 import { Transaction } from '../../store/transactions/transactions.model';
-import { initialState, mockTags } from '../../store/tags/tags.reducers';
+import { tagsInitialState, mockTags } from '../../store/tags/tags.reducers';
 import { select, Store } from '@ngrx/store';
 import { selectTags } from '../../store/tags/tags.selectors';
 import { TagsActions } from '../../store/tags/tags.actions';
@@ -48,7 +48,9 @@ export class AddTagModalComponent implements OnInit {
       );
 
     if (this.tags().length === 0) {
-      this.store.dispatch(TagsActions.tagsRetreived({ tags: initialState }));
+      this.store.dispatch(
+        TagsActions.tagsRetreived({ tags: tagsInitialState })
+      );
     }
   }
 

@@ -133,10 +133,10 @@ export const mockTransactions: Transaction[] = [
   },
 ];
 
-export const initialState: Transaction[] = mockTransactions;
+export const transactionsInitialState: Transaction[] = mockTransactions;
 
 export const transactionsReducer = createReducer(
-  initialState,
+  transactionsInitialState,
   on(
     TransactionsActions.transactionsRetreived,
     (_state, { transactions }) => transactions
