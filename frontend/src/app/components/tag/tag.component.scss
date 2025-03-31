@@ -1,11 +1,19 @@
 @use "../../styles/variables" as *;
 
 #tag-wrapper {
-  display: block;
+  display: flex;
   width: fit-content;
   padding: 8px;
   border-radius: 8px;
   box-shadow: inset 0 0 2px $green-accent;
+
+  #delete-tag-icon {
+    color: gray;
+    &:hover {
+      color: black;
+      cursor: pointer;
+    }
+  }
 }
 
 .clickable {
@@ -13,7 +21,7 @@
 }
 
 .disabled {
-  background-color: $light-background !important;
+  opacity: 0.3;
 }
 
 $color-map: (

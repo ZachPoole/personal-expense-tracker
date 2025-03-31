@@ -1,0 +1,12 @@
+<div id="tags-component">
+  <h1 id="tags-header">Tags</h1>
+
+  <div id="tag-list">
+    <app-tag
+      *ngFor="let tag of tags()"
+      [tag]="tag"
+      [allowDelete]="true"
+      [selectable]="false"
+    ></app-tag>
+  </div>
+</div>

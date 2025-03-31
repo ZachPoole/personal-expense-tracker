@@ -18,8 +18,8 @@
       <app-tag
         *ngFor="let tag of tags()"
         [tag]="tag"
-        [clickable]="true"
-        (tagClicked)="handleTagClicked($event)"
+        [selectable]="true"
+        (tagSelected)="handleTagSelected($event)"
         [disabled]="tag.selected"
       ></app-tag>
     </div>

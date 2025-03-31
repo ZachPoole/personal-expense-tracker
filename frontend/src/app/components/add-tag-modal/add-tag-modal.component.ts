@@ -46,14 +46,17 @@ export class AddTagModalComponent implements OnInit {
       .subscribe((tagsWithSelectionArray: TagSelected[]) =>
         this.tags.set(tagsWithSelectionArray)
       );
-    this.store.dispatch(TagsActions.tagsRetreived({ tags: initialState }));
+
+    if (this.tags().length === 0) {
+      this.store.dispatch(TagsActions.tagsRetreived({ tags: initialState }));
+    }
   }
 
   closeClicked() {
     this.closeModalClicked.emit();
   }
 
-  handleTagClicked(selectedTag: Tag) {
+  handleTagSelected(selectedTag: Tag) {
     this.tags.update((tagsArray: TagSelected[]) =>
       tagsArray.map((tag) => {
         if (tag.id === selectedTag.id) {

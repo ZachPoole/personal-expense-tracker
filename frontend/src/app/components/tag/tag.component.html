@@ -1,8 +1,14 @@
 <div
   id="tag-wrapper"
-  [ngClass]="{ clickable: clickable() && !disabled(), disabled: disabled() }"
+  [ngClass]="{ clickable: selectable() && !disabled(), disabled: disabled() }"
   [class]="'bg-' + tag().color"
-  (click)="handleTagClicked()"
+  (click)="handleTagSelected()"
 >
   <p>{{ tag().name }}</p>
+  <mat-icon
+    (click)="handleDeleteClicked()"
+    id="delete-tag-icon"
+    *ngIf="allowDelete()"
+    >close</mat-icon
+  >
 </div>
