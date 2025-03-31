@@ -1,6 +1,7 @@
 import {
   Component,
   effect,
+  inject,
   OnChanges,
   OnInit,
   signal,
@@ -29,6 +30,8 @@ import { mockTags } from '../../store/tags/tags.reducers';
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements OnInit {
+  store = inject(Store);
+
   transactionSelected = signal<Transaction>({
     id: '',
     name: '',
@@ -40,8 +43,6 @@ export class DashboardComponent implements OnInit {
   showModal = signal(false);
   transactions = signal<Transaction[]>([]);
   storeInitialized = false;
-
-  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store

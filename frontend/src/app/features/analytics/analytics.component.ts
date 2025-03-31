@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { TransactionCardComponent } from '../../components/transaction-card/transaction-card.component';
 import { Store } from '@ngrx/store';
 import { Transaction } from '../../store/transactions/transactions.model';
@@ -12,6 +12,7 @@ import {
   mockTransactions,
   transactionsInitialState,
 } from '../../store/transactions/transactions.reducers';
+import { Tag } from '../../store/tags/tags.model';
 
 @Component({
   selector: 'app-analytics',
@@ -20,20 +21,23 @@ import {
   styleUrl: './analytics.component.scss',
 })
 export class AnalyticsComponent implements OnInit {
-  transactions = signal<Transaction[]>([]);
-  storeInitialized = false;
+  store = inject(Store);
 
-  constructor(private store: Store) {}
+  transactions = signal<Transaction[]>([]);
+  tags = signal<Tag[]>([]);
+
+  transactionStoreInitialized = false;
+  tagStoreInitialized = false;
 
   ngOnInit(): void {
     this.store
       .select(selectTransactionsStoreState)
       .subscribe((transactionsStoreState) => {
         this.transactions.set(transactionsStoreState.transactions);
-        this.storeInitialized = transactionsStoreState.initialized;
+        this.transactionStoreInitialized = transactionsStoreState.initialized;
       });
 
-    if (!this.storeInitialized) {
+    if (!this.transactionStoreInitialized) {
       this.store.dispatch(
         TransactionsActions.seedTransactionState({
           transactions: mockTransactions,

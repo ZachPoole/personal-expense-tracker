@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, model, OnInit, output, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  model,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { TagsActions } from '../../store/tags/tags.actions';
@@ -20,6 +27,8 @@ import {
   styleUrl: './create-tag-modal.component.scss',
 })
 export class CreateTagModalComponent implements OnInit {
+  store = inject(Store);
+
   colorOptions: string[] = [
     'red',
     'orange',
@@ -44,8 +53,6 @@ export class CreateTagModalComponent implements OnInit {
     name: new FormControl(''),
     color: new FormControl('red'),
   });
-
-  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.tagForm.setControl('color', new FormControl(this.colorOptions[0]));

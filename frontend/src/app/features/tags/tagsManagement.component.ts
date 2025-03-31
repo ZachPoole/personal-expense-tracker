@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectTagsStoreState as selectTagsStoreState } from '../../store/tags/tags.selectors';
 import { TagsActions } from '../../store/tags/tags.actions';
@@ -16,6 +16,8 @@ import { CreateTagModalComponent } from '../../components/create-tag-modal/creat
   styleUrl: './tagsManagement.component.scss',
 })
 export class TagsManagementComponent implements OnInit {
+  store = inject(Store);
+
   tags = signal<Tag[]>([]);
   storeInitialized = false;
   createTagTag: Tag = {
@@ -24,8 +26,6 @@ export class TagsManagementComponent implements OnInit {
     color: '',
   };
   showModal = signal(false);
-
-  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store.select(selectTagsStoreState).subscribe((tagsStoreState) => {

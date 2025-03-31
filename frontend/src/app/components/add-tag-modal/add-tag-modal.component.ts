@@ -1,4 +1,11 @@
-import { Component, input, OnInit, output, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  input,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { TransactionCardComponent } from '../transaction-card/transaction-card.component';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,13 +32,13 @@ import { TransactionsActions } from '../../store/transactions/transactions.actio
   styleUrl: './add-tag-modal.component.scss',
 })
 export class AddTagModalComponent implements OnInit {
+  store = inject(Store);
+
   tags = signal<TagSelected[]>([]);
   storeInitialized = false;
 
   transactionSelected = input.required<Transaction>();
   closeModalClicked = output();
-
-  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store
