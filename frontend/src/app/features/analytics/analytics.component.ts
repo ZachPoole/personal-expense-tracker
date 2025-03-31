@@ -18,15 +18,17 @@ import { transactionsInitialState } from '../../store/transactions/transactions.
 })
 export class AnalyticsComponent {
   transactions = signal<Transaction[]>([]);
+  storeInitialized = false;
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store
-      .select(selectTransactions)
-      .subscribe((transactions) => this.transactions.set(transactions));
+    this.store.select(selectTransactions).subscribe((transactions) => {
+      this.transactions.set(transactions);
+      this.storeInitialized = true;
+    });
 
-    if (this.transactions.length === 0) {
+    if (!this.storeInitialized) {
       this.store.dispatch(
         TransactionsActions.transactionsRetreived({
           transactions: transactionsInitialState,

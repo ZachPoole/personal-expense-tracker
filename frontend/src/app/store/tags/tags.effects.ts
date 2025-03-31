@@ -19,6 +19,7 @@ export class TagEffects {
       ofType(TagsActions.tagDeleted), // When deleteTag action is dispatched
       withLatestFrom(this.store.select(selectTransactions)), // Get current transactions
       map(([action, transactions]) => {
+        console.log('tag id to remove: ', action.tagId);
         const updatedTransactions = transactions.map(
           (transaction: Transaction) => ({
             ...transaction,
@@ -27,6 +28,8 @@ export class TagEffects {
             ), // Remove tag from transactions
           })
         );
+
+        console.log(updatedTransactions);
 
         return TransactionsActions.allTransactionTagsUpdated({
           transactions: updatedTransactions,

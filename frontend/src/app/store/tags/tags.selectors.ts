@@ -1,4 +1,4 @@
 import { createFeatureSelector } from '@ngrx/store';
-import { Tag } from './tags.model';
+import { Tag, TagStoreState } from './tags.model';
 
-export const selectTags = createFeatureSelector<Tag[]>('tags');
+export const selectTags = createFeatureSelector<TagStoreState>('tags');

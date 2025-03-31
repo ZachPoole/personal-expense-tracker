@@ -151,5 +151,12 @@ export const transactionsReducer = createReducer(
           return t;
         }
       })
+  ),
+  on(
+    TransactionsActions.allTransactionTagsUpdated,
+    (_state, { transactions }) => {
+      console.log('reducer picked up in transactions actions');
+      return transactions;
+    }
   )
 );

@@ -7,3 +7,8 @@ export interface Tag {
 export interface TagSelected extends Tag {
   selected: boolean;
 }
+
+export interface TagStoreState {
+  initialized: boolean;
+  tags: Tag[];
+}

@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectTags } from '../../store/tags/tags.selectors';
+import { selectTags as selectTagsStoreState } from '../../store/tags/tags.selectors';
 import { TagsActions } from '../../store/tags/tags.actions';
-import { tagsInitialState } from '../../store/tags/tags.reducers';
+import { mockTags, tagsInitialState } from '../../store/tags/tags.reducers';
 import { TagComponent } from '../../components/tag/tag.component';
 import { Tag } from '../../store/tags/tags.model';
 
@@ -15,15 +15,18 @@ import { Tag } from '../../store/tags/tags.model';
 })
 export class TagsManagementComponent implements OnInit {
   tags = signal<Tag[]>([]);
+  storeInitialized = false;
+
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.select(selectTags).subscribe((tags) => this.tags.set(tags));
+    this.store.select(selectTagsStoreState).subscribe((tagsStoreState) => {
+      this.storeInitialized = tagsStoreState.initialized;
+      this.tags.set(tagsStoreState.tags);
+    });
 
-    if (this.tags().length === 0) {
-      this.store.dispatch(
-        TagsActions.tagsRetreived({ tags: tagsInitialState })
-      );
+    if (!this.storeInitialized) {
+      this.store.dispatch(TagsActions.seedTagState({ tags: mockTags }));
     }
   }
 }

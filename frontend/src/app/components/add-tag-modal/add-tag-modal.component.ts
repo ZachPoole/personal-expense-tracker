@@ -26,6 +26,7 @@ import { TransactionsActions } from '../../store/transactions/transactions.actio
 })
 export class AddTagModalComponent implements OnInit {
   tags = signal<TagSelected[]>([]);
+  storeInitialized = false;
 
   transactionSelected = input.required<Transaction>();
   closeModalClicked = output();
@@ -36,8 +37,9 @@ export class AddTagModalComponent implements OnInit {
     this.store
       .select(selectTags)
       .pipe(
-        map((tagsArray) => {
-          return tagsArray.map((tag) => ({
+        map((tagsStoreState) => {
+          this.storeInitialized = tagsStoreState.initialized;
+          return tagsStoreState.tags.map((tag) => ({
             ...tag,
             selected: false,
           }));
@@ -47,10 +49,8 @@ export class AddTagModalComponent implements OnInit {
         this.tags.set(tagsWithSelectionArray)
       );
 
-    if (this.tags().length === 0) {
-      this.store.dispatch(
-        TagsActions.tagsRetreived({ tags: tagsInitialState })
-      );
+    if (!this.storeInitialized) {
+      this.store.dispatch(TagsActions.seedTagState({ tags: mockTags }));
     }
   }
 

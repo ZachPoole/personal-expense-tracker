@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { Tag } from './tags.model';
+import { Tag, TagStoreState } from './tags.model';
 import { TagsActions } from './tags.actions';
 
 export const mockTags: Tag[] = [
@@ -55,13 +55,20 @@ export const mockTags: Tag[] = [
   },
 ];
 
-export const tagsInitialState: Tag[] = mockTags;
+export const tagsInitialState: TagStoreState = { initialized: false, tags: [] };
 
 export const tagsReducer = createReducer(
   tagsInitialState,
-  on(TagsActions.tagsRetreived, (_state, { tags }) => tags),
-  on(TagsActions.tagCreated, (_state, { tag }) => [..._state, tag]),
-  on(TagsActions.tagDeleted, (_state, { tagId }) =>
-    _state.filter((tag: Tag) => tag.id !== tagId)
-  )
+  on(TagsActions.seedTagState, (_state, { tags }) => ({
+    initialized: true,
+    tags: tags,
+  })),
+  on(TagsActions.tagCreated, (_state, { tag }) => ({
+    ..._state,
+    tags: [..._state.tags, tag],
+  })),
+  on(TagsActions.tagDeleted, (_state, { tagId }) => ({
+    ..._state,
+    tags: _state.tags.filter((tag: Tag) => tag.id !== tagId),
+  }))
 );
