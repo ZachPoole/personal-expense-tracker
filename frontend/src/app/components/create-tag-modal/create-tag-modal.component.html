@@ -1,0 +1,35 @@
+<div id="create-tag-modal-component">
+  <div id="modal-body">
+    <div id="create-tag-modal-header">
+      <h1>Create Tag</h1>
+      <div id="close-modal-wrapper" (click)="closeClicked()">
+        <mat-icon id="close-modal-button">close</mat-icon>
+      </div>
+    </div>
+
+    <!-- name input -->
+    <form id="tagForm" [formGroup]="tagForm" (ngSubmit)="handleCreateClicked()">
+      <div>
+        <label>Name</label>
+        <input id="name" type="text" formControlName="name" />
+      </div>
+      <div>
+        <label>Color</label>
+        <select id="color" formControlName="color">
+          <option *ngFor="let color of colorOptions" [value]="color">
+            {{ color }}
+          </option>
+        </select>
+      </div>
+    </form>
+    <h1>Preview Tag:</h1>
+    <app-tag [tag]="newTag()"></app-tag>
+  </div>
+
+  <div id="modal-footer">
+    <button (click)="handleCreateClicked()" type="submit" id="create-button">
+      Create
+    </button>
+    <button (click)="handleCancelClicked()" id="cancel-button">Cancel</button>
+  </div>
+</div>

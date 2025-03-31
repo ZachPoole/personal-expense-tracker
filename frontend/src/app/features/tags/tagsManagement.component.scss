@@ -5,16 +5,50 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 10px;
 
   #tags-header {
     font-size: 24px;
     margin-bottom: 15px;
   }
+  #create-tag-tag {
+    width: fit-content;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: inset 0 0 2px $green-accent;
+    background-color: white;
 
+    &:hover {
+      cursor: pointer;
+      box-shadow: 2px 2px 8px gray;
+    }
+  }
   #tag-list {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
     gap: 10px;
+  }
+}
+
+#create-tag-modal-wrapper {
+  display: flex;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+
+  app-create-tag-modal {
+    background-color: $light-gray-background;
+    margin: 10% auto;
+    padding: 20px;
+    box-shadow: inset 0 0 2px $light-gray-background;
+    width: 500px;
+    height: 500px;
+    border-radius: 15px;
   }
 }

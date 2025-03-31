@@ -1,0 +1,23 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { CreateTagModalComponent } from './create-tag-modal.component';
+
+describe('CreateTagModalComponent', () => {
+  let component: CreateTagModalComponent;
+  let fixture: ComponentFixture<CreateTagModalComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [CreateTagModalComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(CreateTagModalComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

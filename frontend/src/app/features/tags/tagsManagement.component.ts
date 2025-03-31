@@ -6,16 +6,24 @@ import { TagsActions } from '../../store/tags/tags.actions';
 import { mockTags, tagsInitialState } from '../../store/tags/tags.reducers';
 import { TagComponent } from '../../components/tag/tag.component';
 import { Tag } from '../../store/tags/tags.model';
+import { MatIconModule } from '@angular/material/icon';
+import { CreateTagModalComponent } from '../../components/create-tag-modal/create-tag-modal.component';
 
 @Component({
   selector: 'app-tags',
-  imports: [CommonModule, TagComponent],
+  imports: [CommonModule, TagComponent, CreateTagModalComponent],
   templateUrl: './tagsManagement.component.html',
   styleUrl: './tagsManagement.component.scss',
 })
 export class TagsManagementComponent implements OnInit {
   tags = signal<Tag[]>([]);
   storeInitialized = false;
+  createTagTag: Tag = {
+    id: '',
+    name: 'Create Tag',
+    color: '',
+  };
+  showModal = signal(false);
 
   constructor(private store: Store) {}
 
@@ -28,5 +36,13 @@ export class TagsManagementComponent implements OnInit {
     if (!this.storeInitialized) {
       this.store.dispatch(TagsActions.seedTagState({ tags: mockTags }));
     }
+  }
+
+  handleCreateTagClicked() {
+    this.showModal.set(true);
+  }
+
+  closeModalClicked() {
+    this.showModal.set(false);
   }
 }

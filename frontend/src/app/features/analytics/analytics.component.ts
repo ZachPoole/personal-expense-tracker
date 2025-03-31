@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { TransactionCardComponent } from '../../components/transaction-card/transaction-card.component';
 import { Store } from '@ngrx/store';
 import { Transaction } from '../../store/transactions/transactions.model';
@@ -19,7 +19,7 @@ import {
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.scss',
 })
-export class AnalyticsComponent {
+export class AnalyticsComponent implements OnInit {
   transactions = signal<Transaction[]>([]);
   storeInitialized = false;
 
