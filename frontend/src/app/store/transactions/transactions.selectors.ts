@@ -1,12 +1,15 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Transaction } from './transactions.model';
+import { Transaction, TransactionsStoreState } from './transactions.model';
 
-export const selectTransactions =
-  createFeatureSelector<Transaction[]>('transactions');
+export const selectTransactionsStoreState =
+  createFeatureSelector<TransactionsStoreState>('transactions');
 
 export const selectTaglessTransasctions = createSelector(
-  selectTransactions,
-  (transactions) => {
-    return transactions.filter((transaction) => transaction.tags.length === 0);
-  }
+  selectTransactionsStoreState,
+  (transactionStoreState) => ({
+    ...transactionStoreState,
+    transactions: transactionStoreState.transactions.filter(
+      (transaction) => transaction.tags.length === 0
+    ),
+  })
 );

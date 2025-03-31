@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectTags as selectTagsStoreState } from '../../store/tags/tags.selectors';
+import { selectTagsStoreState as selectTagsStoreState } from '../../store/tags/tags.selectors';
 import { TagsActions } from '../../store/tags/tags.actions';
 import { mockTags, tagsInitialState } from '../../store/tags/tags.reducers';
 import { TagComponent } from '../../components/tag/tag.component';

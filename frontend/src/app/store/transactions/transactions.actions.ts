@@ -5,7 +5,7 @@ import { Tag } from '../tags/tags.model';
 export const TransactionsActions = createActionGroup({
   source: 'Transactions',
   events: {
-    'Transactions Retreived': props<{
+    'Seed Transaction State': props<{
       transactions: Transaction[];
     }>(),
     'Transaction Tags Updated': props<{ transactionId: string; tags: Tag[] }>(),

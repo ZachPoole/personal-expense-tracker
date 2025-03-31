@@ -13,10 +13,14 @@ import { select, Store } from '@ngrx/store';
 import { Transaction } from '../../store/transactions/transactions.model';
 import {
   selectTaglessTransasctions,
-  selectTransactions,
+  selectTransactionsStoreState,
 } from '../../store/transactions/transactions.selectors';
 import { TransactionsActions } from '../../store/transactions/transactions.actions';
-import { transactionsInitialState } from '../../store/transactions/transactions.reducers';
+import {
+  mockTransactions,
+  transactionsInitialState,
+} from '../../store/transactions/transactions.reducers';
+import { mockTags } from '../../store/tags/tags.reducers';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,18 +39,22 @@ export class DashboardComponent implements OnInit {
 
   showModal = signal(false);
   transactions = signal<Transaction[]>([]);
+  storeInitialized = false;
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store
       .select(selectTaglessTransasctions)
-      .subscribe((transactions) => this.transactions.set(transactions));
+      .subscribe((transactionsStoreState) => {
+        this.transactions.set(transactionsStoreState.transactions);
+        this.storeInitialized = transactionsStoreState.initialized;
+      });
 
-    if (this.transactions.length === 0) {
+    if (!this.storeInitialized) {
       this.store.dispatch(
-        TransactionsActions.transactionsRetreived({
-          transactions: transactionsInitialState,
+        TransactionsActions.seedTransactionState({
+          transactions: mockTransactions,
         })
       );
     }

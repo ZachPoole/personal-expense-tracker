@@ -5,10 +5,13 @@ import { Store } from '@ngrx/store';
 import { Transaction } from '../../store/transactions/transactions.model';
 import {
   selectTaglessTransasctions,
-  selectTransactions,
+  selectTransactionsStoreState,
 } from '../../store/transactions/transactions.selectors';
 import { TransactionsActions } from '../../store/transactions/transactions.actions';
-import { transactionsInitialState } from '../../store/transactions/transactions.reducers';
+import {
+  mockTransactions,
+  transactionsInitialState,
+} from '../../store/transactions/transactions.reducers';
 
 @Component({
   selector: 'app-analytics',
@@ -23,15 +26,17 @@ export class AnalyticsComponent {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.select(selectTransactions).subscribe((transactions) => {
-      this.transactions.set(transactions);
-      this.storeInitialized = true;
-    });
+    this.store
+      .select(selectTransactionsStoreState)
+      .subscribe((transactionsStoreState) => {
+        this.transactions.set(transactionsStoreState.transactions);
+        this.storeInitialized = transactionsStoreState.initialized;
+      });
 
     if (!this.storeInitialized) {
       this.store.dispatch(
-        TransactionsActions.transactionsRetreived({
-          transactions: transactionsInitialState,
+        TransactionsActions.seedTransactionState({
+          transactions: mockTransactions,
         })
       );
     }

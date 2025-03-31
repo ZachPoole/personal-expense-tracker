@@ -6,7 +6,7 @@ import { TagComponent } from '../tag/tag.component';
 import { Transaction } from '../../store/transactions/transactions.model';
 import { tagsInitialState, mockTags } from '../../store/tags/tags.reducers';
 import { select, Store } from '@ngrx/store';
-import { selectTags } from '../../store/tags/tags.selectors';
+import { selectTagsStoreState } from '../../store/tags/tags.selectors';
 import { TagsActions } from '../../store/tags/tags.actions';
 import { Tag, TagSelected } from '../../store/tags/tags.model';
 import { map, Observable } from 'rxjs';
@@ -35,7 +35,7 @@ export class AddTagModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.store
-      .select(selectTags)
+      .select(selectTagsStoreState)
       .pipe(
         map((tagsStoreState) => {
           this.storeInitialized = tagsStoreState.initialized;

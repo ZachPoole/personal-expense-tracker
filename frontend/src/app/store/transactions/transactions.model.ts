@@ -7,3 +7,8 @@ export interface Transaction {
   dateCreated: Date;
   tags: Tag[] | [];
 }
+
+export interface TransactionsStoreState {
+  initialized: boolean;
+  transactions: Transaction[];
+}

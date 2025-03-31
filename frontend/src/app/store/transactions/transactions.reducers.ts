@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { Transaction } from './transactions.model';
+import { Transaction, TransactionsStoreState } from './transactions.model';
 import { TransactionsActions } from './transactions.actions';
 
 export const mockTransactions: Transaction[] = [
@@ -133,30 +133,32 @@ export const mockTransactions: Transaction[] = [
   },
 ];
 
-export const transactionsInitialState: Transaction[] = mockTransactions;
+export const transactionsInitialState: TransactionsStoreState = {
+  initialized: false,
+  transactions: [],
+};
 
 export const transactionsReducer = createReducer(
   transactionsInitialState,
-  on(
-    TransactionsActions.transactionsRetreived,
-    (_state, { transactions }) => transactions
-  ),
+  on(TransactionsActions.seedTransactionState, (_state, { transactions }) => ({
+    initialized: true,
+    transactions: transactions,
+  })),
   on(
     TransactionsActions.transactionTagsUpdated,
-    (_state, { transactionId, tags }) =>
-      _state.map((t) => {
+    (_state, { transactionId, tags }) => ({
+      ..._state,
+      transactions: _state.transactions.map((t) => {
         if (t.id === transactionId) {
           return { ...t, tags: tags };
         } else {
           return t;
         }
-      })
+      }),
+    })
   ),
   on(
     TransactionsActions.allTransactionTagsUpdated,
-    (_state, { transactions }) => {
-      console.log('reducer picked up in transactions actions');
-      return transactions;
-    }
+    (_state, { transactions }) => ({ ..._state, transactions: transactions })
   )
 );
