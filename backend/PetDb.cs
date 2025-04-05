@@ -6,6 +6,7 @@ class PetDb : DbContext {
 
     public DbSet<Transaction> Transactions => Set<Transaction>();
     public DbSet<Tag> Tags => Set<Tag>();
+    public DbSet<ColorOption> ColorOptions => Set<ColorOption>();
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

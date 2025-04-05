@@ -8,18 +8,7 @@ public class Tag {
     public string Name { get; set; }
     [Required]
     public ColorOption Color { get; set; }
-    public List<Transaction> Transactions { get; set; } = [];
 
-    public override bool Equals(object? obj)
-    {
-        return base.Equals(obj);
-    }
+    public virtual List<Transaction> Transactions { get; set; } = [];
 
-    public bool Equals(Tag tag) {
-        if (tag is null) return false;
-        if(ReferenceEquals(this, tag)) return true;
-        if(GetType() != tag.GetType()) return false;
-
-        return tag.Id == Id;
-    }
 }

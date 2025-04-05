@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -98,12 +99,31 @@ app.MapGet("/tags", async (PetDb db) =>
 
 
 // create new tag
-app.MapPost("/tags", async (Tag tag, PetDb db) =>
+app.MapPost("/tags", async (CreateTagRequestDto newTagRequest, PetDb db) =>
 {
-    db.Tags.Add(tag);
+    if(newTagRequest.Name.IsNullOrEmpty()) {
+        return Results.BadRequest("Name is null or empty");
+    }
+
+    var parsingFailed = !Guid.TryParse(newTagRequest.ColorId.ToString(), out var parsedColorId);
+    if(parsingFailed) {
+        return Results.BadRequest("ColorId could not be parsed to Guid");
+    }
+
+    var dbColorOption = db.ColorOptions.Find(parsedColorId);
+    if(dbColorOption is null) {
+        return TypedResults.NotFound("Could not find ColorOption with specific ColorId");
+    }
+
+    Tag dbTag = new Tag {
+        Name = newTagRequest.Name,
+        Color = dbColorOption
+    };
+
+    db.Tags.Add(dbTag);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/tags/{tag.Id}", tag);
+    return Results.Created($"/tags/{dbTag.Id}", dbTag);
 });
 
 app.MapDelete("/tags/{id}", async (Guid id, PetDb db) =>
@@ -117,6 +137,14 @@ app.MapDelete("/tags/{id}", async (Guid id, PetDb db) =>
 
     return Results.NotFound();
 });
+
+
+
+app.MapGet("/colorOptions", async (PetDb db) => await db.ColorOptions.Select(co => new GetColorOptionsResponseDto {
+    Id = co.Id,
+    Color = co.Color,
+    Order = co.Order
+}).OrderBy(co => co.Order).ToListAsync());
 
 
 app.Run();
