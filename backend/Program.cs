@@ -1,5 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,9 +44,8 @@ if(app.Environment.IsDevelopment()) {
     });
 }
 
-
+/* Transaction Endpoints */
 var transactionEndpoints = app.MapGroup("/transactions");
-
 transactionEndpoints.MapGet("/", GetAllTransactions);
 transactionEndpoints.MapGet("/{id}", GetTransaction);
 transactionEndpoints.MapPost("/tagless", GetTaglessTransactions);
@@ -55,12 +56,27 @@ transactionEndpoints.MapPut("/tags", UpdateTransactionTags)
     .AddEndpointFilter<ValidationFilter<UpdateTransactionTagsRequestDto>>();
 transactionEndpoints.MapDelete("/{id}", DeleteTransaction);
 
+/* Tag Endpoints */
+var tagEndpoints = app.MapGroup("/tags");
+tagEndpoints.MapGet("/", GetTags);
+tagEndpoints.MapPost("/", CreateTag)
+    .AddEndpointFilter<ValidationFilter<CreateTagRequestDto>>();
+tagEndpoints.MapDelete("/{id}", DeleteTag);
+
+/* ColorOptions Endpoints */
+var colorOptionsEndpoints = app.MapGroup("/colorOptions");
+colorOptionsEndpoints.MapGet("/", GetColorOptions);
+
+
+
 
 static async Task<IResult> GetAllTransactions(PetDb db) {
     return TypedResults.Ok(await db.Transactions.ToListAsync());
 }
 
 static async Task<IResult> GetTransaction(Guid id, PetDb db) { 
+    if(id == Guid.Empty) return TypedResults.BadRequest("Id must not be an empty Guid");
+
     return await db.Transactions.FindAsync(id)
         is Transaction transaction 
             ? TypedResults.Ok(transaction)
@@ -93,10 +109,11 @@ static async Task<IResult> UpdateTransactionTags(UpdateTransactionTagsRequestDto
     await db.SaveChangesAsync();
 
     return TypedResults.NoContent();
-};
-
+}
 
 static async Task<IResult> DeleteTransaction(Guid id, PetDb db) {
+    if(id == Guid.Empty) return TypedResults.BadRequest("Id must not be an empty Guid");
+
     if (await db.Transactions.FindAsync(id) is Transaction transaction) {
         db.Transactions.Remove(transaction);
         await db.SaveChangesAsync();
@@ -106,7 +123,7 @@ static async Task<IResult> DeleteTransaction(Guid id, PetDb db) {
     return TypedResults.NotFound();
 }
 
-static async Task<IResult> FilterTransactionsByTags([FromBody]List<Guid> tagsId, PetDb db) {
+static async Task<IResult> FilterTransactionsByTags(List<Guid> tagsId, PetDb db) {
     var tagIdsSet = new HashSet<Guid>(tagsId);
 
     return TypedResults.Ok(
@@ -119,18 +136,11 @@ static async Task<IResult> FilterTransactionsByTags([FromBody]List<Guid> tagsId,
 
 
 
+static async Task<IResult> GetTags(PetDb db) {
+    return TypedResults.Ok(await db.Tags.ToListAsync());
+}
 
-
-/* Tag Endpoints */
-
-// get all tags
-app.MapGet("/tags", async (PetDb db) =>
-    await db.Tags.ToListAsync());
-
-
-// create new tag
-app.MapPost("/tags", async (CreateTagRequestDto request, PetDb db, IMapper mapper) =>
-{   
+static async Task<IResult> CreateTag(CreateTagRequestDto request, PetDb db, IMapper mapper) {
     var dbColorOption = db.ColorOptions.Find(request.ColorId);
     if(dbColorOption is null) return TypedResults.NotFound("Could not find ColorOption with specific ColorId");
 
@@ -141,12 +151,12 @@ app.MapPost("/tags", async (CreateTagRequestDto request, PetDb db, IMapper mappe
     await db.SaveChangesAsync();
 
     TagResponseDto tagResponse =  mapper.Map<TagResponseDto>(newDbTag);
-    return Results.Created($"/tags/{newDbTag.Id}", tagResponse);
-})
-.AddEndpointFilter<ValidationFilter<CreateTagRequestDto>>();
+    return TypedResults.Created($"/tags/{newDbTag.Id}", tagResponse);
+}
 
-app.MapDelete("/tags/{id}", async (Guid id, PetDb db) =>
-{
+static async Task<IResult> DeleteTag(Guid id, PetDb db) {
+    if(id == Guid.Empty) return TypedResults.BadRequest("Id must not be an empty Guid");
+
     if (await db.Tags.FindAsync(id) is Tag tag)
     {
         db.Tags.Remove(tag);
@@ -154,16 +164,12 @@ app.MapDelete("/tags/{id}", async (Guid id, PetDb db) =>
         return Results.NoContent();
     }
 
-    return Results.NotFound();
-});
+    return TypedResults.NotFound();
+}
 
-
-
-app.MapGet("/colorOptions", async (PetDb db) => await db.ColorOptions.Select(co => new GetColorOptionsResponseDto {
-    Id = co.Id,
-    Color = co.Color,
-    Order = co.Order
-}).OrderBy(co => co.Order).ToListAsync());
+static async Task<IResult> GetColorOptions(PetDb db, IMapper mapper) {
+    return TypedResults.Ok(await db.ColorOptions.ProjectTo<GetColorOptionsResponseDto>(mapper.ConfigurationProvider).OrderBy(co => co.Order).ToListAsync());
+}
 
 
 app.Run();
