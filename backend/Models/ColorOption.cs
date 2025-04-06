@@ -8,5 +8,5 @@ public class ColorOption {
     public string Color { get; set; }
     [Required]
     public int Order { get; set; }
-    public virtual List<Tag> Tags { get; set; } = [];
+    
 }

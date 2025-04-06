@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -8,6 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("test");
 builder.Services.AddDbContext<PetDb>(opt => opt.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.ConfigureHttpJsonOptions(options => {
+    options.SerializerOptions.RespectRequiredConstructorParameters = true;
+});
+
+// add auto mapper profiles from assembly lookup
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(config =>
@@ -29,6 +37,8 @@ if(app.Environment.IsDevelopment()) {
         config.DocExpansion = "list";
     });
 }
+
+
 
 
 
@@ -99,32 +109,21 @@ app.MapGet("/tags", async (PetDb db) =>
 
 
 // create new tag
-app.MapPost("/tags", async (CreateTagRequestDto newTagRequest, PetDb db) =>
-{
-    if(newTagRequest.Name.IsNullOrEmpty()) {
-        return Results.BadRequest("Name is null or empty");
-    }
+app.MapPost("/tags", async (CreateTagRequestDto newTagRequest, PetDb db, IMapper mapper) =>
+{   
+    var dbColorOption = db.ColorOptions.Find(newTagRequest.ColorId);
+    if(dbColorOption is null) return TypedResults.NotFound("Could not find ColorOption with specific ColorId");
 
-    var parsingFailed = !Guid.TryParse(newTagRequest.ColorId.ToString(), out var parsedColorId);
-    if(parsingFailed) {
-        return Results.BadRequest("ColorId could not be parsed to Guid");
-    }
+    Tag newDbTag = mapper.Map<Tag>(newTagRequest);
+    newDbTag.ColorId = dbColorOption.Id;
 
-    var dbColorOption = db.ColorOptions.Find(parsedColorId);
-    if(dbColorOption is null) {
-        return TypedResults.NotFound("Could not find ColorOption with specific ColorId");
-    }
-
-    Tag dbTag = new Tag {
-        Name = newTagRequest.Name,
-        Color = dbColorOption
-    };
-
-    db.Tags.Add(dbTag);
+    db.Tags.Add(newDbTag);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/tags/{dbTag.Id}", dbTag);
-});
+    TagResponseDto tagResponse =  mapper.Map<TagResponseDto>(newDbTag);
+    return Results.Created($"/tags/{newDbTag.Id}", tagResponse);
+})
+.AddEndpointFilter<ValidationFilter<CreateTagRequestDto>>();
 
 app.MapDelete("/tags/{id}", async (Guid id, PetDb db) =>
 {

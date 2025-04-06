@@ -10,6 +10,8 @@ public class Transaction {
     public float Amount { get; set; }
     [Required]
     public DateTime DateCreated { get; set; }
-    public virtual List<Tag> Tags { get; set; } = [];
+
+    
+    public List<Tag> Tags { get; set; } = [];
 
 }

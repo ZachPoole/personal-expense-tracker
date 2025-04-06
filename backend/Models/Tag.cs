@@ -7,8 +7,10 @@ public class Tag {
     [Required]
     public string Name { get; set; }
     [Required]
-    public ColorOption Color { get; set; }
 
-    public virtual List<Transaction> Transactions { get; set; } = [];
+
+    public Guid ColorId { get; set; }
+    public ColorOption Color { get; set; }
+    public List<Transaction> Transactions { get; set; } = [];
 
 }
