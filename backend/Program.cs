@@ -4,9 +4,9 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 var connectionString = builder.Configuration.GetConnectionString("test");
 builder.Services.AddDbContext<PetDb>(opt => opt.UseSqlServer(connectionString));
@@ -24,13 +24,15 @@ builder.Services.ConfigureHttpJsonOptions(options => {
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(swag => {
+    swag.EnableAnnotations();
+});
 builder.Services.AddOpenApiDocument(config =>
 {
     config.DocumentName = "PetApi";
     config.Title = "PetAPI v1";
     config.Version = "v1";
 });
-
 
 var app = builder.Build();
 
@@ -45,27 +47,30 @@ if(app.Environment.IsDevelopment()) {
 }
 
 /* Transaction Endpoints */
-var transactionEndpoints = app.MapGroup("/transactions");
-transactionEndpoints.MapGet("/", GetAllTransactions);
-transactionEndpoints.MapGet("/{id}", GetTransaction);
-transactionEndpoints.MapPost("/tagless", GetTaglessTransactions);
-transactionEndpoints.MapPost("/tagSearch", FilterTransactionsByTags);
+var transactionEndpoints = app.MapGroup("/transactions").WithTags("Transactions");
+transactionEndpoints.MapGet("/", GetAllTransactions).WithSummary("Get all Transactions").WithOpenApi();
+transactionEndpoints.MapGet("/{id}", GetTransactionById).WithSummary("Get Transaction by Id").WithOpenApi();
+transactionEndpoints.MapPost("/tagless", GetTaglessTransactions).WithSummary("Get all Tagless Transactions").WithOpenApi();
+transactionEndpoints.MapPost("/tagSearch", FilterTransactionsByTags).WithSummary("Search all Transactions for matching Tags").WithOpenApi();
 transactionEndpoints.MapPost("/", CreateTransaction)
-    .AddEndpointFilter<ValidationFilter<CreateTransactionRequestDto>>();
+    .AddEndpointFilter<ValidationFilter<CreateTransactionRequestDto>>()
+    .WithSummary("Create Transaction").WithOpenApi();
 transactionEndpoints.MapPut("/tags", UpdateTransactionTags)
-    .AddEndpointFilter<ValidationFilter<UpdateTransactionTagsRequestDto>>();
-transactionEndpoints.MapDelete("/{id}", DeleteTransaction);
+    .AddEndpointFilter<ValidationFilter<UpdateTransactionTagsRequestDto>>()
+    .WithSummary("Update the Tags on a Transaction").WithOpenApi();
+transactionEndpoints.MapDelete("/{id}", DeleteTransaction).WithSummary("Delete Transaction").WithOpenApi();
 
 /* Tag Endpoints */
-var tagEndpoints = app.MapGroup("/tags");
-tagEndpoints.MapGet("/", GetTags);
+var tagEndpoints = app.MapGroup("/tags").WithTags("Tags");
+tagEndpoints.MapGet("/", GetTags).WithSummary("Get all Tags").WithOpenApi();
 tagEndpoints.MapPost("/", CreateTag)
-    .AddEndpointFilter<ValidationFilter<CreateTagRequestDto>>();
-tagEndpoints.MapDelete("/{id}", DeleteTag);
+    .AddEndpointFilter<ValidationFilter<CreateTagRequestDto>>()
+    .WithSummary("Create Tag").WithOpenApi();
+tagEndpoints.MapDelete("/{id}", DeleteTag).WithSummary("Delete Tag").WithOpenApi();;
 
 /* ColorOptions Endpoints */
-var colorOptionsEndpoints = app.MapGroup("/colorOptions");
-colorOptionsEndpoints.MapGet("/", GetColorOptions);
+var colorOptionsEndpoints = app.MapGroup("/colorOptions").WithTags("ColorOptions");
+colorOptionsEndpoints.MapGet("/", GetColorOptions).WithSummary("Get all ColorOptions").WithOpenApi();
 
 
 
@@ -74,7 +79,7 @@ static async Task<IResult> GetAllTransactions(PetDb db) {
     return TypedResults.Ok(await db.Transactions.ToListAsync());
 }
 
-static async Task<IResult> GetTransaction(Guid id, PetDb db) { 
+static async Task<IResult> GetTransactionById(Guid id, PetDb db) { 
     if(id == Guid.Empty) return TypedResults.BadRequest("Id must not be an empty Guid");
 
     return await db.Transactions.FindAsync(id)
