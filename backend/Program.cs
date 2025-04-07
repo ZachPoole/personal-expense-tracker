@@ -43,6 +43,8 @@ if(app.Environment.IsDevelopment()) {
     });
 }
 
+app.MapDelete("/reset", ResetMockData).WithSummary("Delete current Transactions and Tags and add Mock Transactions back").WithOpenApi();
+
 /* Transaction Endpoints */
 var transactionEndpoints = app.MapGroup("/transactions").WithTags("Transactions");
 transactionEndpoints.MapGet("/", GetAllTransactions).WithSummary("Get all Transactions").WithOpenApi();
@@ -136,6 +138,87 @@ static async Task<IResult> FilterTransactionsByTags(List<Guid> tagsId, PetDb db)
     );
 }
 
+static async Task<IResult> ResetMockData(PetDb db) {
+    // clear out tables
+    db.Database.ExecuteSqlRaw($"DELETE FROM dbo.TagTransaction");
+    db.Database.ExecuteSqlRaw($"DELETE FROM dbo.Transactions");
+    db.Database.ExecuteSqlRaw($"DELETE FROM dbo.Tags");
+
+    // generate mock data again
+    var mockTags = new List<Tag> 
+    {
+        new() { Id = Guid.NewGuid(), Name = "Food", ColorId = Guid.Parse("fe0b4683-f7f9-432d-8f14-a685d3e73e71") }, // Red 0
+        new() { Id = Guid.NewGuid(), Name = "Essentials", ColorId = Guid.Parse("af4acbd3-6789-4dd5-8afa-710ca93b0077") }, // Orange 1
+        new() { Id = Guid.NewGuid(), Name = "Utilities", ColorId = Guid.Parse("6513a135-199e-4613-8ea7-12c296e6d217") }, // Yellow 2
+        new() { Id = Guid.NewGuid(), Name = "Entertainment", ColorId = Guid.Parse("5b0a3fc3-eebb-4713-ae3d-c846b00821cd") }, // Green 3
+        new() { Id = Guid.NewGuid(), Name = "Transportation", ColorId = Guid.Parse("ea75a4cc-15be-46c3-a6bc-514d609ee777") }, // Indigo 4
+        new() { Id = Guid.NewGuid(), Name = "Health", ColorId = Guid.Parse("d3f928a2-ae05-4eff-a68f-06fa4d7963e9") }, // Violet 5
+        new() { Id = Guid.NewGuid(), Name = "Retail", ColorId = Guid.Parse("c35af576-e2f0-4835-8f81-ff80c68fa202") }, // Blue 6
+        new() { Id = Guid.NewGuid(), Name = "Maintenance", ColorId = Guid.Parse("c35af576-e2f0-4835-8f81-ff80c68fa202") }, // Blue 7
+    };
+
+    db.Tags.AddRange(mockTags);
+
+
+    var mockTransactions = new List<Transaction> 
+    {
+        new() { Id = Guid.NewGuid(), Name = "Grocery Shopping", Amount = 150.75F, DateCreated = new DateTime(2024, 3, 25, 10, 30, 0, DateTimeKind.Utc) },
+        new() { Id = Guid.NewGuid(), Name = "Electric Bill", Amount = 90.25F, DateCreated = new DateTime(2024, 3, 20, 8, 15, 0, DateTimeKind.Utc) },
+        new() { Id = Guid.NewGuid(), Name = "Dinner Out", Amount = 60.00F, DateCreated = new DateTime(2024, 3, 22, 19, 45, 0, DateTimeKind.Utc) },
+        new() { Id = Guid.NewGuid(), Name = "Gas Refill", Amount = 45.00F, DateCreated = new DateTime(2024, 3, 18, 14, 30, 0, DateTimeKind.Utc) },
+        new() { Id = Guid.NewGuid(), Name = "Gym Membership", Amount = 30.00F, DateCreated = new DateTime(2024, 3, 15, 7, 0, 0, DateTimeKind.Utc) },
+        new() { Id = Guid.NewGuid(), Name = "Movie Night", Amount = 25.00F, DateCreated = new DateTime(2024, 3, 14, 20, 0, 0, DateTimeKind.Utc) },
+        new() { Id = Guid.NewGuid(), Name = "Online Shopping", Amount = 120.50F, DateCreated = new DateTime(2024, 3, 10, 15, 25, 0, DateTimeKind.Utc) },
+        new() { Id = Guid.NewGuid(), Name = "Car Repair", Amount = 300.00F, DateCreated = new DateTime(2024, 3, 8, 9, 45, 0, DateTimeKind.Utc) },
+        new() { Id = Guid.NewGuid(), Name = "Rent Payment", Amount = 1200.00F, DateCreated = new DateTime(2024, 3, 1, 12, 0, 0, DateTimeKind.Utc) },
+        new() { Id = Guid.NewGuid(), Name = "Concert Ticket", Amount = 75.00F, DateCreated = new DateTime(2024, 2, 28, 18, 30, 0, DateTimeKind.Utc) }
+    };
+
+    db.Transactions.AddRange(mockTransactions);
+    db.SaveChanges();
+
+    db.Transactions.ToList().ForEach(transaction =>
+    {
+        switch (transaction.Name)
+        {
+            case "Grocery Shopping":
+                // No tags for Grocery Shopping
+                break;
+            case "Electric Bill":
+                // No tags for Electric Bill
+                break;
+            case "Dinner Out":
+                transaction.Tags.Add(mockTags[3]); // Entertainment
+                transaction.Tags.Add(mockTags[0]); // Food
+                break;
+            case "Gas Refill":
+                transaction.Tags.Add(mockTags[4]); // Transportation
+                break;
+            case "Gym Membership":
+                transaction.Tags.Add(mockTags[5]); // Health
+                break;
+            case "Movie Night":
+                transaction.Tags.Add(mockTags[3]); // Entertainment
+                break;
+            case "Online Shopping":
+                transaction.Tags.Add(mockTags[6]); // Retail
+                break;
+            case "Car Repair":
+                transaction.Tags.Add(mockTags[7]); // Maintenance
+                break;
+            case "Rent Payment":
+                transaction.Tags.Add(mockTags[2]); // Utilities
+                transaction.Tags.Add(mockTags[1]); // Essentials
+                break;
+            case "Concert Ticket":
+                transaction.Tags.Add(mockTags[3]); // Entertainment
+                break;
+        }
+    });
+
+    db.SaveChanges();
+    return TypedResults.Ok();
+}
 
 
 static async Task<IResult> GetTags(PetDb db) {
