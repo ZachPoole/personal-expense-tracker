@@ -1,19 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
+import { Transaction } from '../store/transactions/transactions.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class TransactionsApi {
   private http = inject(HttpClient);
-  private basePath = 'http://localhost:5219/api';
+  private basePath = 'http://localhost:5219/api/transactions';
 
-  getTransactions(): Observable<any> {
-    return this.http.get(`${this.basePath}` + '/transactions');
+  getTransactions(): Observable<Array<Transaction>> {
+    return this.http
+      .get<{ items: Transaction[] }>(`${this.basePath}` + '/')
+      .pipe(map((transactions) => transactions.items || []));
   }
 
-  getTaglessTransactions(): Observable<any> {
-    return this.http.get(`${this.basePath}` + '/transactions/tagless');
+  getTaglessTransactions(): Observable<Array<Transaction>> {
+    return this.http
+      .get<{ items: Transaction[] }>(`${this.basePath}` + '/tagless')
+      .pipe(map((transactions) => transactions.items || []));
   }
 }

@@ -1,15 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
+import { ColorOption } from '../store/colorOptions/colorOptions.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ColorOptionsApi {
   private http = inject(HttpClient);
-  private basePath = 'http://localhost:5219/api';
+  private basePath = 'http://localhost:5219/api/colorOption';
 
-  getColorOptions(): Observable<any> {
-    return this.http.get(`${this.basePath}` + '/colorOptions');
+  getColorOptions(): Observable<Array<ColorOption>> {
+    return this.http
+      .get<{ items: ColorOption[] }>(`${this.basePath}` + '/')
+      .pipe(map((colorOptions) => colorOptions.items || []));
   }
 }

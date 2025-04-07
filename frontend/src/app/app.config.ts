@@ -7,12 +7,17 @@ import { provideEffects } from '@ngrx/effects';
 import { TagEffects } from './store/tags/tags.effects';
 import { tagsReducer } from './store/tags/tags.reducers';
 import { provideHttpClient } from '@angular/common/http';
+import { colorOptionsReducer } from './store/colorOptions/colorOptions.reducers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideStore({ transactions: transactionsReducer, tags: tagsReducer }),
+    provideStore({
+      transactions: transactionsReducer,
+      tags: tagsReducer,
+      colorOptions: colorOptionsReducer,
+    }),
     provideEffects([TagEffects]),
     provideHttpClient(),
   ],
