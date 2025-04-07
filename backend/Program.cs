@@ -43,10 +43,13 @@ if(app.Environment.IsDevelopment()) {
     });
 }
 
-app.MapDelete("/reset", ResetMockData).WithSummary("Delete current Transactions and Tags and add Mock Transactions back").WithOpenApi();
+
+var api = app.MapGroup("/api");
+
+api.MapDelete("/reset", ResetMockData).WithSummary("Delete current Transactions and Tags and add Mock Transactions back").WithOpenApi();
 
 /* Transaction Endpoints */
-var transactionEndpoints = app.MapGroup("/transactions").WithTags("Transactions");
+var transactionEndpoints = api.MapGroup("/transactions").WithTags("Transactions");
 transactionEndpoints.MapGet("/", GetAllTransactions).WithSummary("Get all Transactions").WithOpenApi();
 transactionEndpoints.MapGet("/{id}", GetTransactionById).WithSummary("Get Transaction by Id").WithOpenApi();
 transactionEndpoints.MapPost("/tagless", GetTaglessTransactions).WithSummary("Get all Tagless Transactions").WithOpenApi();
@@ -60,7 +63,7 @@ transactionEndpoints.MapPut("/tags", UpdateTransactionTags)
 transactionEndpoints.MapDelete("/{id}", DeleteTransaction).WithSummary("Delete Transaction").WithOpenApi();
 
 /* Tag Endpoints */
-var tagEndpoints = app.MapGroup("/tags").WithTags("Tags");
+var tagEndpoints = api.MapGroup("/tags").WithTags("Tags");
 tagEndpoints.MapGet("/", GetTags).WithSummary("Get all Tags").WithOpenApi();
 tagEndpoints.MapPost("/", CreateTag)
     .AddEndpointFilter<ValidationFilter<CreateTagRequestDto>>()
@@ -68,7 +71,7 @@ tagEndpoints.MapPost("/", CreateTag)
 tagEndpoints.MapDelete("/{id}", DeleteTag).WithSummary("Delete Tag").WithOpenApi();;
 
 /* ColorOptions Endpoints */
-var colorOptionsEndpoints = app.MapGroup("/colorOptions").WithTags("ColorOptions");
+var colorOptionsEndpoints = api.MapGroup("/colorOptions").WithTags("ColorOptions");
 colorOptionsEndpoints.MapGet("/", GetColorOptions).WithSummary("Get all ColorOptions").WithOpenApi();
 
 

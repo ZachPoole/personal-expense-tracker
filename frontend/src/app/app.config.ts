@@ -6,6 +6,7 @@ import { transactionsReducer } from './store/transactions/transactions.reducers'
 import { provideEffects } from '@ngrx/effects';
 import { TagEffects } from './store/tags/tags.effects';
 import { tagsReducer } from './store/tags/tags.reducers';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,5 +14,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideStore({ transactions: transactionsReducer, tags: tagsReducer }),
     provideEffects([TagEffects]),
+    provideHttpClient(),
   ],
 };
