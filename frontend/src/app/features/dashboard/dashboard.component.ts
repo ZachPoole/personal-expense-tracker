@@ -1,27 +1,12 @@
-import {
-  Component,
-  effect,
-  inject,
-  OnChanges,
-  OnInit,
-  signal,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionCardComponent } from '../../components/transaction-card/transaction-card.component';
 import { AddTagModalComponent } from '../../components/add-tag-modal/add-tag-modal.component';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Transaction } from '../../store/transactions/transactions.model';
-import {
-  selectTaglessTransasctions,
-  selectTransactionsStoreState,
-} from '../../store/transactions/transactions.selectors';
-import { TransactionsActions } from '../../store/transactions/transactions.actions';
-import {
-  mockTransactions,
-  transactionsInitialState,
-} from '../../store/transactions/transactions.reducers';
-import { mockTags } from '../../store/tags/tags.reducers';
+import { TransactionsApiActions } from '../../store/transactions/transactions.actions';
+import { TransactionsApi } from '../../api/transactions.api';
+import { selectTransactionsStoreState } from '../../store/transactions/transactions.selectors';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,34 +16,28 @@ import { mockTags } from '../../store/tags/tags.reducers';
 })
 export class DashboardComponent implements OnInit {
   store = inject(Store);
+  transactionsApi = inject(TransactionsApi);
 
-  transactionSelected = signal<Transaction>({
-    id: '',
-    name: '',
-    amount: 0,
-    dateCreated: new Date(),
-    tags: [],
-  });
-
+  transactions = signal<ReadonlyArray<Transaction>>([]);
+  transactionSelected = signal<Transaction | null>(null);
   showModal = signal(false);
-  transactions = signal<Transaction[]>([]);
-  storeInitialized = false;
 
   ngOnInit(): void {
     this.store
-      .select(selectTaglessTransasctions)
+      .select(selectTransactionsStoreState)
       .subscribe((transactionsStoreState) => {
         this.transactions.set(transactionsStoreState.transactions);
-        this.storeInitialized = transactionsStoreState.initialized;
       });
 
-    if (!this.storeInitialized) {
-      this.store.dispatch(
-        TransactionsActions.seedTransactionState({
-          transactions: mockTransactions,
-        })
+    this.transactionsApi
+      .getTaglessTransactions()
+      .subscribe((taglessTransactions) =>
+        this.store.dispatch(
+          TransactionsApiActions.retrievedTaglessTransactions({
+            transactions: taglessTransactions,
+          })
+        )
       );
-    }
   }
 
   addTagClicked(transaction: Transaction) {

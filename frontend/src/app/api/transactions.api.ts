@@ -10,13 +10,15 @@ export class TransactionsApi {
 
   getTransactions(): Observable<Array<Transaction>> {
     return this.http
-      .get<{ items: Transaction[] }>(`${this.basePath}` + '/')
-      .pipe(map((transactions) => transactions.items || []));
+      .get<Transaction[]>(`${this.basePath}` + '/')
+      .pipe(map((transactions) => transactions || []));
   }
 
   getTaglessTransactions(): Observable<Array<Transaction>> {
-    return this.http
-      .get<{ items: Transaction[] }>(`${this.basePath}` + '/tagless')
-      .pipe(map((transactions) => transactions.items || []));
+    return this.http.get<Transaction[]>(`${this.basePath}` + '/tagless').pipe(
+      map((transactions) => {
+        return transactions || [];
+      })
+    );
   }
 }

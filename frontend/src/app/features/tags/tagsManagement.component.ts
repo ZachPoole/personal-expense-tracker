@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectTagsStoreState as selectTagsStoreState } from '../../store/tags/tags.selectors';
-import { TagsActions } from '../../store/tags/tags.actions';
-import { mockTags, tagsInitialState } from '../../store/tags/tags.reducers';
+import { TagsActions, TagsApiActions } from '../../store/tags/tags.actions';
 import { TagComponent } from '../../components/tag/tag.component';
 import { Tag } from '../../store/tags/tags.model';
 import { MatIconModule } from '@angular/material/icon';
 import { CreateTagModalComponent } from '../../components/create-tag-modal/create-tag-modal.component';
+import { TagsApi } from '../../api/tags.api';
 
 @Component({
   selector: 'app-tags',
@@ -17,13 +17,18 @@ import { CreateTagModalComponent } from '../../components/create-tag-modal/creat
 })
 export class TagsManagementComponent implements OnInit {
   store = inject(Store);
+  tagsApi = inject(TagsApi);
 
-  tags = signal<Tag[]>([]);
+  tags = signal<ReadonlyArray<Tag>>([]);
   storeInitialized = false;
   createTagTag: Tag = {
     id: '',
     name: 'Create Tag',
-    color: '',
+    color: {
+      id: '',
+      color: '',
+      order: 1,
+    },
   };
   showModal = signal(false);
 
@@ -34,7 +39,11 @@ export class TagsManagementComponent implements OnInit {
     });
 
     if (!this.storeInitialized) {
-      this.store.dispatch(TagsActions.seedTagState({ tags: mockTags }));
+      this.tagsApi
+        .getTags()
+        .subscribe((tags) =>
+          this.store.dispatch(TagsApiActions.retreivedTags({ tags }))
+        );
     }
   }
 

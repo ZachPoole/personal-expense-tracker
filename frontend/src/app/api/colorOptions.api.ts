@@ -8,11 +8,11 @@ import { ColorOption } from '../store/colorOptions/colorOptions.model';
 })
 export class ColorOptionsApi {
   private http = inject(HttpClient);
-  private basePath = 'http://localhost:5219/api/colorOption';
+  private basePath = 'http://localhost:5219/api/colorOptions';
 
   getColorOptions(): Observable<Array<ColorOption>> {
     return this.http
-      .get<{ items: ColorOption[] }>(`${this.basePath}` + '/')
-      .pipe(map((colorOptions) => colorOptions.items || []));
+      .get<ColorOption[]>(`${this.basePath}` + '/')
+      .pipe(map((colorOptions) => colorOptions || []));
   }
 }

@@ -12,7 +12,7 @@ export class TagsApi {
 
   getTags(): Observable<Array<Tag>> {
     return this.http
-      .get<{ items: Tag[] }>(`${this.basePath}` + '/')
-      .pipe(map((tags) => tags.items || []));
+      .get<Tag[]>(`${this.basePath}` + '/')
+      .pipe(map((tags) => tags || []));
   }
 }

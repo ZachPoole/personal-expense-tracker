@@ -10,5 +10,5 @@ export interface Transaction {
 
 export interface TransactionsStoreState {
   initialized: boolean;
-  transactions: Transaction[];
+  transactions: ReadonlyArray<Transaction>;
 }

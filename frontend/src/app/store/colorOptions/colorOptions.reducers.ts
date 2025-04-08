@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { ColorOptionsStoreState } from './colorOptions.model';
-import { ColorOptionsActions } from './colorOptions.actions';
+import { ColorOptionsApiActions } from './colorOptions.actions';
 
 export const colorOptionsInitialState: ColorOptionsStoreState = {
   initialized: false,
@@ -9,8 +9,11 @@ export const colorOptionsInitialState: ColorOptionsStoreState = {
 
 export const colorOptionsReducer = createReducer(
   colorOptionsInitialState,
-  on(ColorOptionsActions.seedColorOptionState, (_state, { colorOptions }) => ({
-    initialized: true,
-    colorOptions: colorOptions,
-  }))
+  on(
+    ColorOptionsApiActions.retreivedColorOptions,
+    (_state, { colorOptions }) => ({
+      initialized: true,
+      colorOptions: colorOptions,
+    })
+  )
 );

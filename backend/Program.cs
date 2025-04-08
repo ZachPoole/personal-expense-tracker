@@ -17,6 +17,13 @@ builder.Services.ConfigureHttpJsonOptions(options => {
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; 
 });
 
+builder.Services.AddCors(options => {
+    options.AddPolicy(name: "MyAllowSpecificOrigins",
+    policy => {
+        policy.WithOrigins("http://localhost:4200", "http://localhost:5129");
+    });
+});
+
 // add auto mapper profiles from assembly lookup
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -32,6 +39,8 @@ builder.Services.AddOpenApiDocument(config =>
 });
 
 var app = builder.Build();
+
+app.UseCors("MyAllowSpecificOrigins");
 
 if(app.Environment.IsDevelopment()) {
     app.UseOpenApi();
@@ -52,7 +61,7 @@ api.MapDelete("/reset", ResetMockData).WithSummary("Delete current Transactions 
 var transactionEndpoints = api.MapGroup("/transactions").WithTags("Transactions");
 transactionEndpoints.MapGet("/", GetAllTransactions).WithSummary("Get all Transactions").WithOpenApi();
 transactionEndpoints.MapGet("/{id}", GetTransactionById).WithSummary("Get Transaction by Id").WithOpenApi();
-transactionEndpoints.MapPost("/tagless", GetTaglessTransactions).WithSummary("Get all Tagless Transactions").WithOpenApi();
+transactionEndpoints.MapGet("/tagless", GetTaglessTransactions).WithSummary("Get all Tagless Transactions").WithOpenApi();
 transactionEndpoints.MapPost("/tagSearch", FilterTransactionsByTags).WithSummary("Search all Transactions for matching Tags").WithOpenApi();
 transactionEndpoints.MapPost("/", CreateTransaction)
     .AddEndpointFilter<ValidationFilter<CreateTransactionRequestDto>>()
@@ -141,7 +150,7 @@ static async Task<IResult> FilterTransactionsByTags(List<Guid> tagsId, PetDb db)
     );
 }
 
-static async Task<IResult> ResetMockData(PetDb db) {
+static IResult ResetMockData(PetDb db) {
     // clear out tables
     db.Database.ExecuteSqlRaw($"DELETE FROM dbo.TagTransaction");
     db.Database.ExecuteSqlRaw($"DELETE FROM dbo.Transactions");
@@ -224,8 +233,8 @@ static async Task<IResult> ResetMockData(PetDb db) {
 }
 
 
-static async Task<IResult> GetTags(PetDb db) {
-    return TypedResults.Ok(await db.Tags.ToListAsync());
+static async Task<IResult> GetTags(PetDb db, IMapper mapper) {
+    return TypedResults.Ok(await db.Tags.Include(tags => tags.Color).ProjectTo<TagResponseDto>(mapper.ConfigurationProvider).ToListAsync());
 }
 
 static async Task<IResult> CreateTag(CreateTagRequestDto request, PetDb db, IMapper mapper) {

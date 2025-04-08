@@ -6,5 +6,5 @@ export interface ColorOption {
 
 export interface ColorOptionsStoreState {
   initialized: boolean;
-  colorOptions: ColorOption[];
+  colorOptions: ReadonlyArray<ColorOption>;
 }

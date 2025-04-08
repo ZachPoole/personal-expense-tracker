@@ -16,8 +16,8 @@
       <div>
         <label>Color</label>
         <select id="color" formControlName="color">
-          <option *ngFor="let color of colorOptions" [value]="color">
-            {{ color }}
+          <option *ngFor="let color of colorOptions()" [value]="color">
+            {{ color.color }}
           </option>
         </select>
       </div>
