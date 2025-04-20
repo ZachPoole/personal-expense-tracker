@@ -7,7 +7,7 @@ import {
   TransactionsApiActions,
 } from '../transactions/transactions.actions';
 import { TransactionsApi } from '../../api/transactions.api';
-import { EMPTY } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { Transaction } from './transactions.model';
 
 @Injectable()
@@ -34,6 +34,27 @@ export class TransactionEffects {
     );
   });
 
+  filterTransactionsEffect$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TransactionsActions.transactionsFiltered),
+      exhaustMap((actionData) => {
+        if (actionData.tagsIds.length > 0) {
+          return this.transactionApi
+            .filterTransactions({
+              TagsIds: actionData.tagsIds,
+            })
+            .pipe(
+              map((transactions: ReadonlyArray<Transaction>) =>
+                TransactionsApiActions.filteredTransacions({ transactions })
+              ),
+              catchError(() => EMPTY)
+            );
+        }
+        return of(TransactionsActions.transactionsFilterReset());
+      })
+    );
+  });
+
   pullFreshTaglessTransactionsEffect$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(
@@ -56,7 +77,10 @@ export class TransactionEffects {
 
   pullFreshTransactionsEffect$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(TransactionsActions.analyticsComponentLoaded),
+      ofType(
+        TransactionsActions.analyticsComponentLoaded,
+        TransactionsActions.transactionsFilterReset
+      ),
       exhaustMap(() =>
         this.transactionApi.getTransactions().pipe(
           map((transactions: ReadonlyArray<Transaction>) =>

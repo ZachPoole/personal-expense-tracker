@@ -78,6 +78,12 @@ export class AnalyticsComponent implements OnInit {
         }
       })
     );
+
+    this.store.dispatch(
+      TransactionsActions.transactionsFiltered({
+        tagsIds: [...this.selectedTags],
+      })
+    );
   }
 
   private updateTotal() {

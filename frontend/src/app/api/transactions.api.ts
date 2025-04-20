@@ -32,6 +32,19 @@ export class TransactionsApi {
       .pipe(catchError(this.handleError));
   }
 
+  filterTransactions(
+    body: FilterTransactionsRequestBody
+  ): Observable<Array<Transaction>> {
+    return this.http
+      .post<Transaction[]>(`${this.basePath}` + '/tagSearch', body)
+      .pipe(
+        map((transactions) => {
+          return transactions || [];
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error('API error:', error);
     return throwError(() => new Error(error.error?.message || 'Server error.'));
@@ -40,5 +53,9 @@ export class TransactionsApi {
 
 interface UpdateTransactionTagsRequestBody {
   TransactionId: string;
+  TagsIds: string[];
+}
+
+interface FilterTransactionsRequestBody {
   TagsIds: string[];
 }

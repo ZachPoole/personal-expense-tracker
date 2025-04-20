@@ -145,13 +145,14 @@ static async Task<IResult> DeleteTransaction(Guid id, PetDb db) {
     return TypedResults.NotFound();
 }
 
-static async Task<IResult> FilterTransactionsByTags(List<Guid> tagsId, PetDb db) {
-    var tagIdsSet = new HashSet<Guid>(tagsId);
+static async Task<IResult> FilterTransactionsByTags(FilterTransactionsByTagsRequest request, PetDb db) {
+    var tagIdsSet = new HashSet<Guid>(request.TagsIds);
 
     return TypedResults.Ok(
         await db.Transactions
+            .Where(transaction => transaction.Tags.Any(tag => tagIdsSet.Contains(tag.Id)))
             .Include(transaction => transaction.Tags)
-            .Where(transaction => transaction.Tags.FindIndex(tag => tagIdsSet.Contains(tag.Id)) != -1)
+            .ThenInclude(transactionWithTags => transactionWithTags.Color)
             .ToListAsync()
     );
 }

@@ -11,6 +11,8 @@ export const TransactionsActions = createActionGroup({
       transactionId: string;
       tagsIds: string[];
     }>(),
+    'Transactions Filtered': props<{ tagsIds: string[] }>(),
+    'Transactions Filter Reset': emptyProps(),
   },
 });
 
@@ -24,5 +26,8 @@ export const TransactionsApiActions = createActionGroup({
       transactions: ReadonlyArray<Transaction>;
     }>(),
     'Updated Transaction Tags': emptyProps(),
+    'Filtered Transacions': props<{
+      transactions: ReadonlyArray<Transaction>;
+    }>(),
   },
 });
