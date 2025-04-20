@@ -21,7 +21,7 @@ builder.Services.AddCors(options => {
     options.AddPolicy(name: "MyAllowSpecificOrigins",
     policy => {
         policy
-.WithOrigins("http://localhost:4200", "http://localhost:5129")
+            .WithOrigins("http://localhost:4200", "http://localhost:5129")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -116,8 +116,8 @@ static async Task<IResult> CreateTransaction(CreateTransactionRequestDto request
 }
 
 static async Task<IResult> UpdateTransactionTags(UpdateTransactionTagsRequestDto request, PetDb db) {
-    if (request.TagIds.Count() < 1) return TypedResults.BadRequest("Need tags ids to add tags to transaction");
-    var tagIdsSet = new HashSet<Guid>(request.TagIds);
+    if (request.TagsIds.Count() < 1) return TypedResults.BadRequest("Need tags ids to add tags to transaction");
+    var tagIdsSet = new HashSet<Guid>(request.TagsIds);
     
     var dbTransaction = await db.Transactions.FindAsync(request.TransactionId);
     if (dbTransaction is null) return TypedResults.NotFound("Transaction not found for provided transaction Id");

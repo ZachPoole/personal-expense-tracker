@@ -25,22 +25,22 @@ export const transactionsReducer = createReducer(
       initialized: true,
       transactions: transactions,
     })
-  ),
-  on(
-    TransactionsActions.transactionTagsUpdated,
-    (_state, { transactionId, tags }) => ({
-      ..._state,
-      transactions: _state.transactions.map((t) => {
-        if (t.id === transactionId) {
-          return { ...t, tags: tags };
-        } else {
-          return t;
-        }
-      }),
-    })
-  ),
-  on(
-    TransactionsActions.allTransactionTagsUpdated,
-    (_state, { transactions }) => ({ ..._state, transactions: transactions })
   )
+  // on(
+  //   TransactionsActions.transactionTagsUpdated,
+  //   (_state, { transactionId, tagsIds }) => ({
+  //     ..._state,
+  //     transactions: _state.transactions.map((t) => {
+  //       if (t.id === transactionId) {
+  //         return { ...t, tags: tagsIds };
+  //       } else {
+  //         return t;
+  //       }
+  //     }),
+  //   })
+  // ),
+  // on(
+  //   TransactionsActions.allTransactionTagsUpdated,
+  //   (_state, { transactions }) => ({ ..._state, transactions: transactions })
+  // )
 );
