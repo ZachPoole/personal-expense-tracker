@@ -6,6 +6,10 @@ import { TagsActions, TagsApiActions } from './tags.actions';
 import { TagsApi } from '../../api/tags.api';
 import { EMPTY } from 'rxjs';
 import { Tag } from './tags.model';
+import {
+  TransactionsActions,
+  TransactionsApiActions,
+} from '../transactions/transactions.actions';
 
 @Injectable()
 export class TagEffects {
@@ -48,7 +52,8 @@ export class TagEffects {
       ofType(
         TagsActions.appLoaded,
         TagsApiActions.deletedTag,
-        TagsApiActions.createdTag
+        TagsApiActions.createdTag,
+        TransactionsApiActions.mockDataReset
       ),
       exhaustMap(() =>
         this.tagsApi.getTags().pipe(

@@ -45,7 +45,7 @@ export class TransactionEffects {
             })
             .pipe(
               map((transactions: ReadonlyArray<Transaction>) =>
-                TransactionsApiActions.filteredTransacions({ transactions })
+                TransactionsApiActions.filteredTransactions({ transactions })
               ),
               catchError(() => EMPTY)
             );
@@ -60,7 +60,8 @@ export class TransactionEffects {
       ofType(
         TransactionsActions.appLoaded,
         TransactionsActions.dashboardComponentLoaded,
-        TransactionsApiActions.updatedTransactionTags
+        TransactionsApiActions.updatedTransactionTags,
+        TransactionsApiActions.mockDataReset
       ),
       exhaustMap(() =>
         this.transactionApi.getTaglessTransactions().pipe(
@@ -86,6 +87,18 @@ export class TransactionEffects {
           map((transactions: ReadonlyArray<Transaction>) =>
             TransactionsApiActions.retrievedTransactions({ transactions })
           ),
+          catchError(() => EMPTY)
+        )
+      )
+    );
+  });
+
+  resetMockDataEffect$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TransactionsActions.resetMockData),
+      exhaustMap(() =>
+        this.transactionApi.resetMockData().pipe(
+          map(() => TransactionsApiActions.mockDataReset()),
           catchError(() => EMPTY)
         )
       )

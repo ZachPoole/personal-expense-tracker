@@ -1,17 +1,19 @@
 <div id="sidebar">
-  <a routerLink="/dashboard" class="nav-link" routerLinkActive="active-link">
-    Dashboard
-  </a>
+  <div id="routing-section">
+    <a routerLink="/dashboard" class="nav-link" routerLinkActive="active-link">
+      Dashboard
+    </a>
 
-  <a routerLink="/tags" class="nav-link" routerLinkActive="active-link">
-    Tags
-  </a>
+    <a routerLink="/tags" class="nav-link" routerLinkActive="active-link">
+      Tags
+    </a>
 
-  <a routerLink="/analytics" class="nav-link" routerLinkActive="active-link">
-    Analytics
-  </a>
+    <a routerLink="/analytics" class="nav-link" routerLinkActive="active-link">
+      Analytics
+    </a>
+  </div>
 
-  <!-- <a routerLink="/settings" class="nav-link" routerLinkActive="active-link">
-    Settings
-  </a> -->
+  <button (click)="handleResetClicked()" id="reset-button">
+    Reset Mock Data
+  </button>
 </div>

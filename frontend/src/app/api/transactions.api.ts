@@ -45,6 +45,10 @@ export class TransactionsApi {
       );
   }
 
+  resetMockData(): Observable<any> {
+    return this.http.delete('http://localhost:5219/api/reset');
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error('API error:', error);
     return throwError(() => new Error(error.error?.message || 'Server error.'));

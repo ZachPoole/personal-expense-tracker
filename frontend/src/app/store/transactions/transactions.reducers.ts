@@ -27,7 +27,7 @@ export const transactionsReducer = createReducer(
     })
   ),
   on(
-    TransactionsApiActions.filteredTransacions,
+    TransactionsApiActions.filteredTransactions,
     (_state, { transactions }) => ({
       initialized: true,
       transactions: transactions,

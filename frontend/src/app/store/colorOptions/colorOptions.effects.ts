@@ -9,6 +9,7 @@ import {
   ColorOptionsActions,
   ColorOptionsApiActions,
 } from './colorOptions.actions';
+import { TransactionsApiActions } from '../transactions/transactions.actions';
 
 @Injectable()
 export class ColorOptionsEffects {
@@ -18,7 +19,10 @@ export class ColorOptionsEffects {
 
   pullFreshTagsEffect$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(ColorOptionsActions.appLoaded),
+      ofType(
+        ColorOptionsActions.appLoaded,
+        TransactionsApiActions.mockDataReset
+      ),
       exhaustMap(() =>
         this.colorOptionsApi.getColorOptions().pipe(
           map((colorOptions: ReadonlyArray<ColorOption>) =>

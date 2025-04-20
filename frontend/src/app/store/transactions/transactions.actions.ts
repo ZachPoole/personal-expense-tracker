@@ -13,6 +13,7 @@ export const TransactionsActions = createActionGroup({
     }>(),
     'Transactions Filtered': props<{ tagsIds: string[] }>(),
     'Transactions Filter Reset': emptyProps(),
+    'Reset Mock Data': emptyProps(),
   },
 });
 
@@ -26,8 +27,9 @@ export const TransactionsApiActions = createActionGroup({
       transactions: ReadonlyArray<Transaction>;
     }>(),
     'Updated Transaction Tags': emptyProps(),
-    'Filtered Transacions': props<{
+    'Filtered Transactions': props<{
       transactions: ReadonlyArray<Transaction>;
     }>(),
+    'Mock Data Reset': emptyProps(),
   },
 });
