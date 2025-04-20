@@ -37,14 +37,6 @@ export class TagsManagementComponent implements OnInit {
       this.storeInitialized = tagsStoreState.initialized;
       this.tags.set(tagsStoreState.tags);
     });
-
-    if (!this.storeInitialized) {
-      this.tagsApi
-        .getTags()
-        .subscribe((tags) =>
-          this.store.dispatch(TagsApiActions.retreivedTags({ tags }))
-        );
-    }
   }
 
   handleCreateTagClicked() {

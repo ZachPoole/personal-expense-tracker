@@ -28,7 +28,7 @@ export class TagEffects {
 
   pullFreshTagsEffect$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(TagsApiActions.deletedTag),
+      ofType(TagsActions.appLoaded, TagsApiActions.deletedTag),
       exhaustMap(() =>
         this.tagsApi.getTags().pipe(
           map((tags: ReadonlyArray<Tag>) =>

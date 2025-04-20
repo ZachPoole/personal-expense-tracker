@@ -4,7 +4,10 @@ import { TransactionCardComponent } from '../../components/transaction-card/tran
 import { AddTagModalComponent } from '../../components/add-tag-modal/add-tag-modal.component';
 import { Store } from '@ngrx/store';
 import { Transaction } from '../../store/transactions/transactions.model';
-import { TransactionsApiActions } from '../../store/transactions/transactions.actions';
+import {
+  TransactionsActions,
+  TransactionsApiActions,
+} from '../../store/transactions/transactions.actions';
 import { TransactionsApi } from '../../api/transactions.api';
 import { selectTransactionsStoreState } from '../../store/transactions/transactions.selectors';
 
@@ -29,15 +32,7 @@ export class DashboardComponent implements OnInit {
         this.transactions.set(transactionsStoreState.transactions);
       });
 
-    this.transactionsApi
-      .getTaglessTransactions()
-      .subscribe((taglessTransactions) =>
-        this.store.dispatch(
-          TransactionsApiActions.retrievedTaglessTransactions({
-            transactions: taglessTransactions,
-          })
-        )
-      );
+    this.store.dispatch(TransactionsActions.dashboardComponentLoaded());
   }
 
   addTagClicked(transaction: Transaction) {

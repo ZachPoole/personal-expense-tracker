@@ -59,20 +59,7 @@ export class AnalyticsComponent implements OnInit {
         this.tags.set(tagsWithSelectionArray)
       );
 
-    this.transactionsApi.getTransactions().subscribe((transactions) => {
-      console.log(transactions);
-      this.store.dispatch(
-        TransactionsApiActions.retrievedTransactions({ transactions })
-      );
-    });
-
-    if (!this.tagStoreInitialized) {
-      this.tagsApi
-        .getTags()
-        .subscribe((tags) =>
-          this.store.dispatch(TagsApiActions.retreivedTags({ tags }))
-        );
-    }
+    this.store.dispatch(TransactionsActions.analyticsComponentLoaded());
   }
 
   handleTagSelected(selectedTag: TagWithSelection) {

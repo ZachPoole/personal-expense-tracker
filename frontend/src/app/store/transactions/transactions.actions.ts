@@ -4,6 +4,9 @@ import { Transaction } from './transactions.model';
 export const TransactionsActions = createActionGroup({
   source: 'Transactions',
   events: {
+    'App Loaded': emptyProps(),
+    'Analytics Component Loaded': emptyProps(),
+    'Dashboard Component Loaded': emptyProps(),
     'Transaction Tags Updated': props<{
       transactionId: string;
       tagsIds: string[];

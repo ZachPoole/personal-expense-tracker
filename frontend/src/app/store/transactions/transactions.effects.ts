@@ -36,7 +36,11 @@ export class TransactionEffects {
 
   pullFreshTaglessTransactionsEffect$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(TransactionsApiActions.updatedTransactionTags),
+      ofType(
+        TransactionsActions.appLoaded,
+        TransactionsActions.dashboardComponentLoaded,
+        TransactionsApiActions.updatedTransactionTags
+      ),
       exhaustMap(() =>
         this.transactionApi.getTaglessTransactions().pipe(
           map((transactions: ReadonlyArray<Transaction>) =>
@@ -50,17 +54,17 @@ export class TransactionEffects {
     );
   });
 
-  // pullFreshTransactionsEffect$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(),
-  //     exhaustMap(() =>
-  //       this.transactionApi.getTransactions().pipe(
-  //         map((transactions: ReadonlyArray<Transaction>) =>
-  //           TransactionsApiActions.retrievedTransactions({ transactions })
-  //         ),
-  //         catchError(() => EMPTY)
-  //       )
-  //     )
-  //   );
-  // });
+  pullFreshTransactionsEffect$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TransactionsActions.analyticsComponentLoaded),
+      exhaustMap(() =>
+        this.transactionApi.getTransactions().pipe(
+          map((transactions: ReadonlyArray<Transaction>) =>
+            TransactionsApiActions.retrievedTransactions({ transactions })
+          ),
+          catchError(() => EMPTY)
+        )
+      )
+    );
+  });
 }

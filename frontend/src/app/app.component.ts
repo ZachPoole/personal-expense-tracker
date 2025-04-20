@@ -5,9 +5,9 @@ import { Store } from '@ngrx/store';
 import { TransactionsApi } from './api/transactions.api';
 import { TagsApi } from './api/tags.api';
 import { ColorOptionsApi } from './api/colorOptions.api';
-import { TransactionsApiActions } from './store/transactions/transactions.actions';
-import { TagsApiActions } from './store/tags/tags.actions';
-import { ColorOptionsApiActions } from './store/colorOptions/colorOptions.actions';
+import { TransactionsActions } from './store/transactions/transactions.actions';
+import { TagsActions } from './store/tags/tags.actions';
+import { ColorOptionsActions } from './store/colorOptions/colorOptions.actions';
 
 @Component({
   selector: 'app-root',
@@ -25,28 +25,8 @@ export class AppComponent implements OnInit {
   title = 'personal-expense-tracker-frontend';
 
   ngOnInit(): void {
-    this.transactionsApi
-      .getTaglessTransactions()
-      .subscribe((taglessTransactions) =>
-        this.store.dispatch(
-          TransactionsApiActions.retrievedTaglessTransactions({
-            transactions: taglessTransactions,
-          })
-        )
-      );
-
-    this.tagsApi
-      .getTags()
-      .subscribe((tags) =>
-        this.store.dispatch(TagsApiActions.retreivedTags({ tags }))
-      );
-
-    this.colorOptionsApi
-      .getColorOptions()
-      .subscribe((colorOptions) =>
-        this.store.dispatch(
-          ColorOptionsApiActions.retreivedColorOptions({ colorOptions })
-        )
-      );
+    this.store.dispatch(TransactionsActions.appLoaded());
+    this.store.dispatch(TagsActions.appLoaded());
+    this.store.dispatch(ColorOptionsActions.appLoaded());
   }
 }

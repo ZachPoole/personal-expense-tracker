@@ -56,14 +56,6 @@ export class AddTagModalComponent implements OnInit {
       .subscribe((tagsWithSelectionArray: TagWithSelection[]) =>
         this.tags.set(tagsWithSelectionArray)
       );
-
-    if (!this.storeInitialized) {
-      this.tagsApi
-        .getTags()
-        .subscribe((tags) =>
-          this.store.dispatch(TagsApiActions.retreivedTags({ tags }))
-        );
-    }
   }
 
   closeClicked() {

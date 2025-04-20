@@ -4,6 +4,7 @@ import { Tag } from './tags.model';
 export const TagsActions = createActionGroup({
   source: 'Tags',
   events: {
+    'App Loaded': emptyProps(),
     'Tag Created': props<{ tag: Tag }>(),
     'Tag Deleted': props<{ tagId: string }>(),
   },
