@@ -9,6 +9,7 @@ import { tagsReducer } from './store/tags/tags.reducers';
 import { provideHttpClient } from '@angular/common/http';
 import { colorOptionsReducer } from './store/colorOptions/colorOptions.reducers';
 import { TransactionEffects } from './store/transactions/transactions.effects';
+import { ColorOptionsEffects } from './store/colorOptions/colorOptions.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,7 +20,7 @@ export const appConfig: ApplicationConfig = {
       tags: tagsReducer,
       colorOptions: colorOptionsReducer,
     }),
-    provideEffects([TagEffects, TransactionEffects]),
+    provideEffects([TagEffects, TransactionEffects, ColorOptionsEffects]),
     provideHttpClient(),
   ],
 };

@@ -26,9 +26,30 @@ export class TagEffects {
     );
   });
 
+  createTagEffect$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TagsActions.tagCreated),
+      exhaustMap((actionData) =>
+        this.tagsApi
+          .createTag({
+            Name: actionData.tag.name,
+            ColorId: actionData.tag.color.id,
+          })
+          .pipe(
+            map(() => TagsApiActions.createdTag()),
+            catchError(() => EMPTY)
+          )
+      )
+    );
+  });
+
   pullFreshTagsEffect$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(TagsActions.appLoaded, TagsApiActions.deletedTag),
+      ofType(
+        TagsActions.appLoaded,
+        TagsApiActions.deletedTag,
+        TagsApiActions.createdTag
+      ),
       exhaustMap(() =>
         this.tagsApi.getTags().pipe(
           map((tags: ReadonlyArray<Tag>) =>

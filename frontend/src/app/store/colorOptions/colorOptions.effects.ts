@@ -11,7 +11,7 @@ import {
 } from './colorOptions.actions';
 
 @Injectable()
-export class TagEffects {
+export class ColorOptionsEffects {
   actions$ = inject(Actions);
   store = inject(Store);
   colorOptionsApi = inject(ColorOptionsApi);

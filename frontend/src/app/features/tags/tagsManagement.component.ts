@@ -20,7 +20,6 @@ export class TagsManagementComponent implements OnInit {
   tagsApi = inject(TagsApi);
 
   tags = signal<ReadonlyArray<Tag>>([]);
-  storeInitialized = false;
   createTagTag: Tag = {
     id: '',
     name: 'Create Tag',
@@ -34,7 +33,6 @@ export class TagsManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.select(selectTagsStoreState).subscribe((tagsStoreState) => {
-      this.storeInitialized = tagsStoreState.initialized;
       this.tags.set(tagsStoreState.tags);
     });
   }

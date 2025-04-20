@@ -15,5 +15,6 @@ export const TagsApiActions = createActionGroup({
   events: {
     'Retreived Tags': props<{ tags: ReadonlyArray<Tag> }>(),
     'Deleted Tag': emptyProps(),
+    'Created Tag': emptyProps(),
   },
 });

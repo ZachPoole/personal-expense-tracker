@@ -41,12 +41,12 @@ export class CreateTagModalComponent implements OnInit {
   newTag = model<Tag>({
     id: uuidv4(),
     name: 'Placeholder',
-    color: this.colorOptions()[0],
+    color: { id: '', color: 'Red', order: 1 },
   });
 
   tagForm = new FormGroup({
     id: new FormControl(uuidv4()),
-    name: new FormControl(''),
+    name: new FormControl('Placeholder'),
     color: new FormControl({ id: '', color: 'red', order: 1 }),
   });
 
@@ -55,10 +55,13 @@ export class CreateTagModalComponent implements OnInit {
       .select(selectColorOptionsStoreState)
       .subscribe((colorOptionsStoreState) => {
         this.colorOptions.set(colorOptionsStoreState.colorOptions);
+
         this.tagForm.setControl(
           'color',
           new FormControl(this.colorOptions()[0])
         );
+
+        this.newTag.set({ ...this.newTag(), color: this.colorOptions()[0] });
       });
 
     this.tagForm.valueChanges.subscribe((newValue) => {

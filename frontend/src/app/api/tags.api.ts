@@ -23,8 +23,19 @@ export class TagsApi {
       .pipe(catchError(this.handleError));
   }
 
+  createTag(newTag: CreateTagRequestBody): Observable<any> {
+    return this.http
+      .post<Tag>(`${this.basePath}` + '/', newTag)
+      .pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error('API error:', error);
     return throwError(() => new Error(error.error?.message || 'Server error.'));
   }
+}
+
+interface CreateTagRequestBody {
+  Name: string;
+  ColorId: string;
 }

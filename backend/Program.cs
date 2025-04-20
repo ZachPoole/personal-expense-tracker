@@ -242,7 +242,7 @@ static async Task<IResult> GetTags(PetDb db, IMapper mapper) {
 
 static async Task<IResult> CreateTag(CreateTagRequestDto request, PetDb db, IMapper mapper) {
     var dbColorOption = db.ColorOptions.Find(request.ColorId);
-    if(dbColorOption is null) return TypedResults.NotFound("Could not find ColorOption with specific ColorId");
+    if(dbColorOption is null) return TypedResults.NotFound("Could not find ColorOption with specificed ColorId");
 
     Tag newDbTag = mapper.Map<Tag>(request);
     newDbTag.ColorId = dbColorOption.Id;
