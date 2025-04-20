@@ -1,4 +1,4 @@
-import { createActionGroup, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Tag } from './tags.model';
 
 export const TagsActions = createActionGroup({
@@ -13,5 +13,6 @@ export const TagsApiActions = createActionGroup({
   source: 'Tags API',
   events: {
     'Retreived Tags': props<{ tags: ReadonlyArray<Tag> }>(),
+    'Deleted Tag': emptyProps(),
   },
 });
