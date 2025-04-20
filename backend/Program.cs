@@ -90,7 +90,10 @@ colorOptionsEndpoints.MapGet("/", GetColorOptions).WithSummary("Get all ColorOpt
 
 
 static async Task<IResult> GetAllTransactions(PetDb db) {
-    return TypedResults.Ok(await db.Transactions.ToListAsync());
+    return TypedResults.Ok(await db.Transactions
+        .Include((transactions) => transactions.Tags)
+        .ThenInclude((transactionsWithTags) => transactionsWithTags.Color)
+        .ToListAsync());
 }
 
 static async Task<IResult> GetTransactionById(Guid id, PetDb db) { 
