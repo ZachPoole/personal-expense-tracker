@@ -20,7 +20,10 @@ builder.Services.ConfigureHttpJsonOptions(options => {
 builder.Services.AddCors(options => {
     options.AddPolicy(name: "MyAllowSpecificOrigins",
     policy => {
-        policy.WithOrigins("http://localhost:4200", "http://localhost:5129");
+        policy
+.WithOrigins("http://localhost:4200", "http://localhost:5129")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
