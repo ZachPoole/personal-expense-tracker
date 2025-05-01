@@ -13,6 +13,7 @@
 <div *ngIf="showModal()" id="add-tag-modal-wrapper">
   <app-add-tag-modal
     (closeModalClicked)="closeModalClicked()"
-    [transactionSelected]="transactionSelected()"
+    *ngIf="transactionSelected() != null"
+    [transactionSelected]="transactionSelected()!"
   ></app-add-tag-modal>
 </div>

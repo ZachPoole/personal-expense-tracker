@@ -3,21 +3,19 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { TransactionCardComponent } from '../../components/transaction-card/transaction-card.component';
 import { Store } from '@ngrx/store';
 import { Transaction } from '../../store/transactions/transactions.model';
+import { selectTransactionsStoreState } from '../../store/transactions/transactions.selectors';
 import {
-  selectTaglessTransasctions,
-  selectTransactionsStoreState,
-} from '../../store/transactions/transactions.selectors';
-import { TransactionsActions } from '../../store/transactions/transactions.actions';
-import {
-  mockTransactions,
-  transactionsInitialState,
-} from '../../store/transactions/transactions.reducers';
+  TransactionsActions,
+  TransactionsApiActions,
+} from '../../store/transactions/transactions.actions';
+import { transactionsInitialState } from '../../store/transactions/transactions.reducers';
 import { Tag, TagWithSelection } from '../../store/tags/tags.model';
 import { selectTagsStoreState } from '../../store/tags/tags.selectors';
-import { TagsActions } from '../../store/tags/tags.actions';
-import { mockTags } from '../../store/tags/tags.reducers';
+import { TagsActions, TagsApiActions } from '../../store/tags/tags.actions';
 import { TagComponent } from '../../components/tag/tag.component';
 import { map } from 'rxjs';
+import { TransactionsApi } from '../../api/transactions.api';
+import { TagsApi } from '../../api/tags.api';
 
 @Component({
   selector: 'app-analytics',
@@ -27,15 +25,15 @@ import { map } from 'rxjs';
 })
 export class AnalyticsComponent implements OnInit {
   store = inject(Store);
+  transactionsApi = inject(TransactionsApi);
+  tagsApi = inject(TagsApi);
 
-  transactions = signal<Transaction[]>([]);
-  filteredTransactions = signal<Transaction[]>([]);
+  transactions = signal<ReadonlyArray<Transaction>>([]);
   tags = signal<TagWithSelection[]>([]);
   selectedTags = new Set<string>();
 
   total = signal<number>(0);
 
-  transactionStoreInitialized = false;
   tagStoreInitialized = false;
 
   ngOnInit(): void {
@@ -43,8 +41,6 @@ export class AnalyticsComponent implements OnInit {
       .select(selectTransactionsStoreState)
       .subscribe((transactionsStoreState) => {
         this.transactions.set(transactionsStoreState.transactions);
-        this.filteredTransactions.set(transactionsStoreState.transactions);
-        this.transactionStoreInitialized = transactionsStoreState.initialized;
         this.updateTotal();
       });
 
@@ -63,21 +59,7 @@ export class AnalyticsComponent implements OnInit {
         this.tags.set(tagsWithSelectionArray)
       );
 
-    if (!this.transactionStoreInitialized) {
-      this.store.dispatch(
-        TransactionsActions.seedTransactionState({
-          transactions: mockTransactions,
-        })
-      );
-    }
-
-    if (!this.tagStoreInitialized) {
-      this.store.dispatch(
-        TagsActions.seedTagState({
-          tags: mockTags,
-        })
-      );
-    }
+    this.store.dispatch(TransactionsActions.analyticsComponentLoaded());
   }
 
   handleTagSelected(selectedTag: TagWithSelection) {
@@ -97,29 +79,16 @@ export class AnalyticsComponent implements OnInit {
       })
     );
 
-    this.updateFilteredTransactions();
-  }
-
-  private updateFilteredTransactions() {
-    if (this.selectedTags.size === 0) {
-      this.filteredTransactions.set(this.transactions());
-    } else {
-      this.filteredTransactions.set(
-        this.transactions().filter(
-          (transaction: Transaction) =>
-            transaction.tags.findIndex((tag) =>
-              this.selectedTags.has(tag.id)
-            ) !== -1
-        )
-      );
-    }
-
-    this.updateTotal();
+    this.store.dispatch(
+      TransactionsActions.transactionsFiltered({
+        tagsIds: [...this.selectedTags],
+      })
+    );
   }
 
   private updateTotal() {
     let sum = 0;
-    this.filteredTransactions().forEach((transaction) => {
+    this.transactions().forEach((transaction) => {
       sum += transaction.amount;
     });
 

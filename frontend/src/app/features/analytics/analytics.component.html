@@ -17,7 +17,7 @@
 
   <div id="transaction-list">
     <app-transaction-card
-      *ngFor="let transaction of filteredTransactions()"
+      *ngFor="let transaction of transactions()"
       [transaction]="transaction"
       [showButton]="false"
     ></app-transaction-card>

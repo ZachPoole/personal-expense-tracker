@@ -20,11 +20,6 @@ export class TagComponent {
   selected = input<boolean>(false);
   allowDelete = input<boolean>(false);
 
-  getBackgroundColor() {
-    let color = 'var($red-pastel)';
-    return color;
-  }
-
   handleTagSelected() {
     if (this.selectable()) {
       this.tagSelected.emit({ ...this.tag(), selected: !this.selected() });

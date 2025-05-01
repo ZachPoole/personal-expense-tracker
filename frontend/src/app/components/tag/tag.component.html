@@ -1,7 +1,7 @@
 <div
   id="tag-wrapper"
   [ngClass]="{ selectable: selectable(), selected: selected() }"
-  [class]="'bg-' + tag().color"
+  [class]="'bg-' + tag().color.color.toLowerCase()"
   (click)="handleTagSelected()"
 >
   <p>{{ tag().name }}</p>

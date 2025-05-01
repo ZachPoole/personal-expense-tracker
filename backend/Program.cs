@@ -17,6 +17,16 @@ builder.Services.ConfigureHttpJsonOptions(options => {
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; 
 });
 
+builder.Services.AddCors(options => {
+    options.AddPolicy(name: "MyAllowSpecificOrigins",
+    policy => {
+        policy
+            .WithOrigins("http://localhost:4200", "http://localhost:5129")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 // add auto mapper profiles from assembly lookup
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -33,6 +43,8 @@ builder.Services.AddOpenApiDocument(config =>
 
 var app = builder.Build();
 
+app.UseCors("MyAllowSpecificOrigins");
+
 if(app.Environment.IsDevelopment()) {
     app.UseOpenApi();
     app.UseSwaggerUi(config => {
@@ -43,13 +55,16 @@ if(app.Environment.IsDevelopment()) {
     });
 }
 
-app.MapDelete("/reset", ResetMockData).WithSummary("Delete current Transactions and Tags and add Mock Transactions back").WithOpenApi();
+
+var api = app.MapGroup("/api");
+
+api.MapDelete("/reset", ResetMockData).WithSummary("Delete current Transactions and Tags and add Mock Transactions back").WithOpenApi();
 
 /* Transaction Endpoints */
-var transactionEndpoints = app.MapGroup("/transactions").WithTags("Transactions");
+var transactionEndpoints = api.MapGroup("/transactions").WithTags("Transactions");
 transactionEndpoints.MapGet("/", GetAllTransactions).WithSummary("Get all Transactions").WithOpenApi();
 transactionEndpoints.MapGet("/{id}", GetTransactionById).WithSummary("Get Transaction by Id").WithOpenApi();
-transactionEndpoints.MapPost("/tagless", GetTaglessTransactions).WithSummary("Get all Tagless Transactions").WithOpenApi();
+transactionEndpoints.MapGet("/tagless", GetTaglessTransactions).WithSummary("Get all Tagless Transactions").WithOpenApi();
 transactionEndpoints.MapPost("/tagSearch", FilterTransactionsByTags).WithSummary("Search all Transactions for matching Tags").WithOpenApi();
 transactionEndpoints.MapPost("/", CreateTransaction)
     .AddEndpointFilter<ValidationFilter<CreateTransactionRequestDto>>()
@@ -60,7 +75,7 @@ transactionEndpoints.MapPut("/tags", UpdateTransactionTags)
 transactionEndpoints.MapDelete("/{id}", DeleteTransaction).WithSummary("Delete Transaction").WithOpenApi();
 
 /* Tag Endpoints */
-var tagEndpoints = app.MapGroup("/tags").WithTags("Tags");
+var tagEndpoints = api.MapGroup("/tags").WithTags("Tags");
 tagEndpoints.MapGet("/", GetTags).WithSummary("Get all Tags").WithOpenApi();
 tagEndpoints.MapPost("/", CreateTag)
     .AddEndpointFilter<ValidationFilter<CreateTagRequestDto>>()
@@ -68,14 +83,17 @@ tagEndpoints.MapPost("/", CreateTag)
 tagEndpoints.MapDelete("/{id}", DeleteTag).WithSummary("Delete Tag").WithOpenApi();;
 
 /* ColorOptions Endpoints */
-var colorOptionsEndpoints = app.MapGroup("/colorOptions").WithTags("ColorOptions");
+var colorOptionsEndpoints = api.MapGroup("/colorOptions").WithTags("ColorOptions");
 colorOptionsEndpoints.MapGet("/", GetColorOptions).WithSummary("Get all ColorOptions").WithOpenApi();
 
 
 
 
 static async Task<IResult> GetAllTransactions(PetDb db) {
-    return TypedResults.Ok(await db.Transactions.ToListAsync());
+    return TypedResults.Ok(await db.Transactions
+        .Include((transactions) => transactions.Tags)
+        .ThenInclude((transactionsWithTags) => transactionsWithTags.Color)
+        .ToListAsync());
 }
 
 static async Task<IResult> GetTransactionById(Guid id, PetDb db) { 
@@ -101,8 +119,8 @@ static async Task<IResult> CreateTransaction(CreateTransactionRequestDto request
 }
 
 static async Task<IResult> UpdateTransactionTags(UpdateTransactionTagsRequestDto request, PetDb db) {
-    if (request.TagIds.Count() < 1) return TypedResults.BadRequest("Need tags ids to add tags to transaction");
-    var tagIdsSet = new HashSet<Guid>(request.TagIds);
+    if (request.TagsIds.Count() < 1) return TypedResults.BadRequest("Need tags ids to add tags to transaction");
+    var tagIdsSet = new HashSet<Guid>(request.TagsIds);
     
     var dbTransaction = await db.Transactions.FindAsync(request.TransactionId);
     if (dbTransaction is null) return TypedResults.NotFound("Transaction not found for provided transaction Id");
@@ -127,18 +145,19 @@ static async Task<IResult> DeleteTransaction(Guid id, PetDb db) {
     return TypedResults.NotFound();
 }
 
-static async Task<IResult> FilterTransactionsByTags(List<Guid> tagsId, PetDb db) {
-    var tagIdsSet = new HashSet<Guid>(tagsId);
+static async Task<IResult> FilterTransactionsByTags(FilterTransactionsByTagsRequest request, PetDb db) {
+    var tagIdsSet = new HashSet<Guid>(request.TagsIds);
 
     return TypedResults.Ok(
         await db.Transactions
+            .Where(transaction => transaction.Tags.Any(tag => tagIdsSet.Contains(tag.Id)))
             .Include(transaction => transaction.Tags)
-            .Where(transaction => transaction.Tags.FindIndex(tag => tagIdsSet.Contains(tag.Id)) != -1)
+            .ThenInclude(transactionWithTags => transactionWithTags.Color)
             .ToListAsync()
     );
 }
 
-static async Task<IResult> ResetMockData(PetDb db) {
+static IResult ResetMockData(PetDb db) {
     // clear out tables
     db.Database.ExecuteSqlRaw($"DELETE FROM dbo.TagTransaction");
     db.Database.ExecuteSqlRaw($"DELETE FROM dbo.Transactions");
@@ -221,13 +240,13 @@ static async Task<IResult> ResetMockData(PetDb db) {
 }
 
 
-static async Task<IResult> GetTags(PetDb db) {
-    return TypedResults.Ok(await db.Tags.ToListAsync());
+static async Task<IResult> GetTags(PetDb db, IMapper mapper) {
+    return TypedResults.Ok(await db.Tags.Include(tags => tags.Color).ProjectTo<TagResponseDto>(mapper.ConfigurationProvider).ToListAsync());
 }
 
 static async Task<IResult> CreateTag(CreateTagRequestDto request, PetDb db, IMapper mapper) {
     var dbColorOption = db.ColorOptions.Find(request.ColorId);
-    if(dbColorOption is null) return TypedResults.NotFound("Could not find ColorOption with specific ColorId");
+    if(dbColorOption is null) return TypedResults.NotFound("Could not find ColorOption with specificed ColorId");
 
     Tag newDbTag = mapper.Map<Tag>(request);
     newDbTag.ColorId = dbColorOption.Id;

@@ -11,13 +11,13 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TagComponent } from '../tag/tag.component';
 import { Transaction } from '../../store/transactions/transactions.model';
-import { tagsInitialState, mockTags } from '../../store/tags/tags.reducers';
 import { select, Store } from '@ngrx/store';
 import { selectTagsStoreState } from '../../store/tags/tags.selectors';
-import { TagsActions } from '../../store/tags/tags.actions';
+import { TagsActions, TagsApiActions } from '../../store/tags/tags.actions';
 import { Tag, TagWithSelection } from '../../store/tags/tags.model';
 import { map, Observable } from 'rxjs';
 import { TransactionsActions } from '../../store/transactions/transactions.actions';
+import { TagsApi } from '../../api/tags.api';
 
 @Component({
   selector: 'app-add-tag-modal',
@@ -33,6 +33,7 @@ import { TransactionsActions } from '../../store/transactions/transactions.actio
 })
 export class AddTagModalComponent implements OnInit {
   store = inject(Store);
+  tagsApi = inject(TagsApi);
 
   tags = signal<TagWithSelection[]>([]);
   storeInitialized = false;
@@ -55,10 +56,6 @@ export class AddTagModalComponent implements OnInit {
       .subscribe((tagsWithSelectionArray: TagWithSelection[]) =>
         this.tags.set(tagsWithSelectionArray)
       );
-
-    if (!this.storeInitialized) {
-      this.store.dispatch(TagsActions.seedTagState({ tags: mockTags }));
-    }
   }
 
   closeClicked() {
@@ -81,9 +78,12 @@ export class AddTagModalComponent implements OnInit {
     this.store.dispatch(
       TransactionsActions.transactionTagsUpdated({
         transactionId: this.transactionSelected().id,
-        tags: this.tags().filter((tag) => tag.selected),
+        tagsIds: this.tags()
+          .filter((tag: TagWithSelection) => tag.selected)
+          .map((tag: TagWithSelection) => tag.id),
       })
     );
+
     this.closeModalClicked.emit();
   }
 

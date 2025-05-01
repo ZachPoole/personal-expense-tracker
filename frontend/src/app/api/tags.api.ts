@@ -1,0 +1,41 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { catchError, map, Observable, throwError } from 'rxjs';
+import { Tag } from '../store/tags/tags.model';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TagsApi {
+  private http = inject(HttpClient);
+  private basePath = 'http://localhost:5219/api/tags';
+
+  getTags(): Observable<Array<Tag>> {
+    return this.http.get<Tag[]>(`${this.basePath}` + '/').pipe(
+      map((tags) => tags || []),
+      catchError(this.handleError)
+    );
+  }
+
+  deleteTag(tagId: string): Observable<any> {
+    return this.http
+      .delete(`${this.basePath}` + `/${tagId}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  createTag(newTag: CreateTagRequestBody): Observable<any> {
+    return this.http
+      .post<Tag>(`${this.basePath}` + '/', newTag)
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    console.error('API error:', error);
+    return throwError(() => new Error(error.error?.message || 'Server error.'));
+  }
+}
+
+interface CreateTagRequestBody {
+  Name: string;
+  ColorId: string;
+}
